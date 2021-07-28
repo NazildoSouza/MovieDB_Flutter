@@ -1,0 +1,202 @@
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moviedb_flutter/src/bloc/drawerbloc/drawer_bloc.dart';
+import 'package:moviedb_flutter/src/bloc/searchbloc/search_bloc.dart';
+import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/ui/home/home_screen.dart';
+import 'package:moviedb_flutter/src/ui/movie/now_playing.dart';
+import 'package:moviedb_flutter/src/ui/movie/popular.dart';
+import 'package:moviedb_flutter/src/ui/movie/top_rated.dart';
+import 'package:moviedb_flutter/src/ui/movie/upcoming.dart';
+import 'package:moviedb_flutter/src/ui/search/sarch_screen.dart';
+import 'package:moviedb_flutter/src/ui/serie/serie_airingtoday.dart';
+import 'package:moviedb_flutter/src/ui/serie/serie_onair.dart';
+import 'package:moviedb_flutter/src/ui/serie/serie_popular.dart';
+import 'package:moviedb_flutter/src/ui/serie/serie_toprated.dart';
+
+import 'custom_drawer.dart';
+
+class MainContainerWidget extends StatefulWidget {
+  const MainContainerWidget({Key? key}) : super(key: key);
+
+  @override
+  _MainContainerWidgetState createState() => _MainContainerWidgetState();
+}
+
+class _MainContainerWidgetState extends State<MainContainerWidget> {
+  _MainContainerWidgetState() {
+    isPlatformDark =
+        WidgetsBinding.instance?.window.platformBrightness == Brightness.dark;
+    initTheme = isPlatformDark ? _darkTheme : _lightTheme;
+  }
+  late DrawerBloc _bloc;
+  late Widget _content;
+
+  late final bool isPlatformDark;
+  late final ThemeData initTheme;
+
+  ThemeData _lightTheme = ThemeData(
+    brightness: Brightness.light,
+    buttonColor: Colors.blue,
+    primaryColor: Colors.white,
+    scaffoldBackgroundColor: Colors.white,
+  );
+
+  ThemeData _darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: Colors.grey[850],
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    _bloc = DrawerBloc();
+    _content = _getContentForState(_bloc.state);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DrawerBloc>(
+          create: (_) => _bloc,
+        ),
+        BlocProvider<SearchBloc>(
+          // lazy: false,
+          create: (_) => SearchBloc(),
+        ),
+        // BlocProvider<MovieBloc>(
+        //   // lazy: false,
+        //   create: (_) => MovieBloc(),
+        // ),
+      ],
+      child: BlocListener<DrawerBloc, NavDrawerState>(
+        listener: (BuildContext context, NavDrawerState state) {
+          setState(() {
+            _content = _getContentForState(state);
+          });
+        },
+        child: BlocBuilder<DrawerBloc, NavDrawerState>(
+          builder: (BuildContext context, NavDrawerState state) =>
+              ThemeProvider(
+            initTheme: initTheme,
+            builder: (context, myTheme) {
+              return MaterialApp(
+                theme: myTheme,
+                home: ThemeSwitchingArea(
+                  child: Scaffold(
+                    drawer: CustomDrawer(),
+                    appBar: AppBar(
+                      elevation: 0,
+                      centerTitle: true,
+                      actions: [
+                        ThemeSwitcher(
+                          clipper: ThemeSwitcherCircleClipper(),
+                          builder: (context) {
+                            var brightness =
+                                ThemeProvider.of(context)?.brightness;
+                            return IconButton(
+                              icon: Icon(brightness == Brightness.light
+                                  ? Icons.dark_mode
+                                  : Icons.light_mode),
+                              onPressed: () {
+                                ThemeSwitcher.of(context)?.changeTheme(
+                                  theme: brightness == Brightness.light
+                                      ? _darkTheme
+                                      : _lightTheme,
+                                  reverseAnimation:
+                                      brightness == Brightness.dark
+                                          ? true
+                                          : false,
+                                );
+                              },
+                            );
+                          },
+                        )
+                      ],
+                      title: Text(
+                        state.selectedItem.description!.toUpperCase(),
+                      ),
+                    ),
+                    body: AnimatedSwitcher(
+                      // switchInCurve: Curves.easeInExpo,
+                      // switchOutCurve: Curves.easeOutExpo,
+                      duration: Duration(milliseconds: 500),
+                      child: _content,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+
+    // return BlocProvider<DrawerBloc>(
+    //   create: (BuildContext context) => _bloc,
+    //   child: BlocListener<DrawerBloc, NavDrawerState>(
+    //     listener: (BuildContext context, NavDrawerState state) {
+    //       setState(() {
+    //         _content = _getContentForState(state);
+    //       });
+    //     },
+    //     child: BlocBuilder<DrawerBloc, NavDrawerState>(
+    //       builder: (BuildContext context, NavDrawerState state) => Scaffold(
+    //         drawer: CustomDrawer(),
+    //         appBar: AppBar(
+    //           backgroundColor: Colors.transparent,
+    //           elevation: 0,
+    //           iconTheme: IconThemeData(color: Colors.black87),
+    //           centerTitle: true,
+    //           title: Text(
+    //             state.selectedItem.description!.toUpperCase(),
+    //             style: Theme.of(context).textTheme.caption?.copyWith(
+    //                   color: Colors.black45,
+    //                   fontSize: 20,
+    //                   fontWeight: FontWeight.bold,
+    //                   fontFamily: 'muli',
+    //                 ),
+    //           ),
+    //         ),
+    //         body: AnimatedSwitcher(
+    //           // switchInCurve: Curves.easeInExpo,
+    //           // switchOutCurve: Curves.easeOutExpo,
+    //           duration: Duration(milliseconds: 50),
+    //           child: _content,
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
+  }
+
+  _getContentForState(NavDrawerState state) {
+    switch (state.selectedItem) {
+      case NavItem.home:
+        return HomeScreen();
+      case NavItem.page_two:
+        return NowPlaying();
+      case NavItem.page_three:
+        return Upcoming();
+      case NavItem.page_four:
+        return TopRated();
+      case NavItem.page_five:
+        return Popular();
+      case NavItem.page_six:
+        return SerieAiringToday();
+      case NavItem.page_seven:
+        return SerieOnAir();
+      case NavItem.page_eight:
+        return SerieTopRated();
+      case NavItem.page_nine:
+        return SeriePopular();
+      case NavItem.pesquisa:
+        return SearchScreen();
+      default:
+        return ErrorMessage(message: 'Erro ao exibir página');
+    }
+  }
+}
