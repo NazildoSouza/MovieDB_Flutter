@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/moviebloc/movie_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/personbloc/person_bloc.dart';
-import 'package:moviedb_flutter/src/ui/home/carousel_slide.dart';
-import 'package:moviedb_flutter/src/ui/home/category_movie_screen.dart';
-import 'package:moviedb_flutter/src/ui/home/category_serie_screen.dart';
-import 'package:moviedb_flutter/src/ui/home/person_list.dart';
+import 'package:moviedb_flutter/src/views/home/carousel_slide.dart';
+import 'package:moviedb_flutter/src/views/home/category_movie_screen.dart';
+import 'package:moviedb_flutter/src/views/home/category_serie_screen.dart';
+import 'package:moviedb_flutter/src/views/home/person_list.dart';
 
 class HomeScreen extends StatelessWidget {
   @override

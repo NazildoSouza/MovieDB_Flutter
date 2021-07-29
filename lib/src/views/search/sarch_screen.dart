@@ -8,10 +8,10 @@ import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:moviedb_flutter/src/bloc/searchbloc/search_bloc.dart';
 import 'package:moviedb_flutter/src/extensions/extension.dart';
 import 'package:moviedb_flutter/src/model/search.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/movie_detail_screen.dart';
-import 'package:moviedb_flutter/src/ui/person/person_detail_screen.dart';
-import 'package:moviedb_flutter/src/ui/serie/serie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/movie/movie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/person/person_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../components/loading_screen.dart';

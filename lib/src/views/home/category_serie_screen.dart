@@ -6,26 +6,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:moviedb_flutter/src/bloc/genrebloc/genre_bloc.dart';
-import 'package:moviedb_flutter/src/bloc/moviebloc/movie_bloc.dart';
+import 'package:moviedb_flutter/src/bloc/seriebloc/serie_bloc.dart';
 import 'package:moviedb_flutter/src/circle_progress/circle_progress_screen.dart';
 import 'package:moviedb_flutter/src/model/genres.dart';
-import 'package:moviedb_flutter/src/model/movie.dart';
-import 'package:moviedb_flutter/src/ui/components/delay.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/movie_detail_screen.dart';
+import 'package:moviedb_flutter/src/model/serie.dart';
+import 'package:moviedb_flutter/src/views/components/delay.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
-class MovieCategories extends StatefulWidget {
-  MovieCategories({Key? key, this.selectedGenre = 28}) : super(key: key);
+class SerieCategories extends StatefulWidget {
+  SerieCategories({Key? key, this.selectedGenre = 10759}) : super(key: key);
 
   final int selectedGenre;
 
   @override
-  _MovieCategoriesState createState() => _MovieCategoriesState();
+  _SerieCategoriesState createState() => _SerieCategoriesState();
 }
 
-class _MovieCategoriesState extends State<MovieCategories> {
+class _SerieCategoriesState extends State<SerieCategories> {
   late int selectedGenre;
   int page = 1;
 
@@ -35,12 +35,12 @@ class _MovieCategoriesState extends State<MovieCategories> {
     selectedGenre = widget.selectedGenre;
   }
 
-  _loadMore(BuildContext context, MovieLoaded state) async {
-    if (state.movieResponse.page == page) {
+  _loadMore(BuildContext context, SerieLoaded state) async {
+    if (state.serieResponse.page == page) {
       page++;
 
-      BlocProvider.of<MovieBloc>(context)
-        ..add(MovieEventGenre(selectedGenre, page));
+      BlocProvider.of<SerieBloc>(context)
+        ..add(SerieEventGenre(selectedGenre, page));
       await Future.delayed(delay);
       setState(() {});
     }
@@ -51,10 +51,10 @@ class _MovieCategoriesState extends State<MovieCategories> {
     return MultiBlocProvider(
       providers: [
         BlocProvider<GenreBloc>(
-          create: (_) => GenreBloc()..add(GenreMovieEventStarted()),
+          create: (_) => GenreBloc()..add(GenreSerieEventStarted()),
         ),
-        BlocProvider<MovieBloc>(
-          create: (_) => MovieBloc()..add(MovieEventGenre(selectedGenre, page)),
+        BlocProvider<SerieBloc>(
+          create: (_) => SerieBloc()..add(SerieEventGenre(selectedGenre, page)),
         ),
       ],
       child: _buildGenre(context),
@@ -78,7 +78,7 @@ class _MovieCategoriesState extends State<MovieCategories> {
                     padding: const EdgeInsets.all(15.0),
                     child: Container(
                       child: Text(
-                        'Filmes'.toUpperCase(),
+                        'Séries'.toUpperCase(),
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
@@ -112,8 +112,8 @@ class _MovieCategoriesState extends State<MovieCategories> {
                                     setState(() {
                                       selectedGenre = genre.id!;
                                       page = 1;
-                                      context.read<MovieBloc>().add(
-                                          MovieEventGenre(selectedGenre, page));
+                                      context.read<SerieBloc>().add(
+                                          SerieEventGenre(selectedGenre, page));
                                     });
                                   }
                                 },
@@ -155,7 +155,7 @@ class _MovieCategoriesState extends State<MovieCategories> {
               return ErrorMessage(
                 message: state.message,
                 onTap: () {
-                  context.read<GenreBloc>().add(GenreMovieEventStarted());
+                  context.read<GenreBloc>().add(GenreSerieEventStarted());
                 },
               );
             } else {
@@ -166,12 +166,12 @@ class _MovieCategoriesState extends State<MovieCategories> {
         SizedBox(
           height: 20,
         ),
-        BlocBuilder<MovieBloc, MovieState>(
+        BlocBuilder<SerieBloc, SerieState>(
           builder: (context, state) {
-            if (state is MovieLoading) {
+            if (state is SerieLoading) {
               return Container(height: 310, child: LoadingScreen());
-            } else if (state is MovieLoaded) {
-              List<Movie> movieList = state.movieResponse.results ?? <Movie>[];
+            } else if (state is SerieLoaded) {
+              List<Serie> serieList = state.serieResponse.results ?? <Serie>[];
 
               return Container(
                 height: 310,
@@ -188,9 +188,9 @@ class _MovieCategoriesState extends State<MovieCategories> {
                       width: 15,
                     ),
                     scrollDirection: Axis.horizontal,
-                    itemCount: movieList.length,
+                    itemCount: serieList.length,
                     itemBuilder: (context, index) {
-                      Movie movie = movieList[index];
+                      Serie serie = serieList[index];
                       Color color = Colors.grey.shade200;
                       return Row(
                         children: [
@@ -200,11 +200,11 @@ class _MovieCategoriesState extends State<MovieCategories> {
                               GestureDetector(
                                 onTap: () async {
                                   late PaletteGenerator paletteGenerator;
-                                  if (movie.posterString('w200') != null) {
+                                  if (serie.posterString('w200') != null) {
                                     paletteGenerator = await PaletteGenerator
                                         .fromImageProvider(
                                             CachedNetworkImageProvider(
-                                                movie.posterString('w200')!));
+                                                serie.posterString('w200')!));
                                   } else {
                                     paletteGenerator = await PaletteGenerator
                                         .fromImageProvider(AssetImage(
@@ -213,10 +213,9 @@ class _MovieCategoriesState extends State<MovieCategories> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => MovieDetailScreen(
-                                        movieId: movie.id ?? 0,
-                                        paletteColor: paletteGenerator,
-                                      ),
+                                      builder: (context) => SerieDetailScreen(
+                                          serieId: serie.id ?? 0,
+                                          paletteColor: paletteGenerator),
                                     ),
                                   );
                                 },
@@ -235,7 +234,7 @@ class _MovieCategoriesState extends State<MovieCategories> {
                                         clipBehavior: Clip.antiAlias,
                                         child: CachedNetworkImage(
                                           imageUrl:
-                                              movie.posterString('w200') ?? '',
+                                              serie.posterString('w200') ?? '',
                                           imageBuilder:
                                               (context, imageProvider) {
                                             return Container(
@@ -289,7 +288,7 @@ class _MovieCategoriesState extends State<MovieCategories> {
                                       width: 60,
                                       height: 60,
                                       child: RadialChart(
-                                          voteAverage: movie.voteAverage ?? 0),
+                                          voteAverage: serie.voteAverage ?? 0),
                                     ),
                                   ],
                                 ),
@@ -300,7 +299,7 @@ class _MovieCategoriesState extends State<MovieCategories> {
                               Container(
                                 width: 180,
                                 child: Text(
-                                  (movie.title ?? '').toUpperCase(),
+                                  (serie.name ?? '').toUpperCase(),
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 12,
@@ -319,13 +318,13 @@ class _MovieCategoriesState extends State<MovieCategories> {
                   ),
                 ),
               );
-            } else if (state is MovieError) {
+            } else if (state is SerieError) {
               return ErrorMessage(
                 message: state.message,
                 onTap: () {
                   context
-                      .read<MovieBloc>()
-                      .add(MovieEventGenre(selectedGenre, page));
+                      .read<SerieBloc>()
+                      .add(SerieEventGenre(selectedGenre, page));
                 },
               );
             } else {

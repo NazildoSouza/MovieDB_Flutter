@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:moviedb_flutter/src/extensions/extension.dart';
 import 'package:moviedb_flutter/src/model/serie_detail.dart';
-import 'package:moviedb_flutter/src/ui/serie/episodes_season.dart';
+import 'package:moviedb_flutter/src/views/serie/episodes_season.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class SerieSeasons extends StatelessWidget {

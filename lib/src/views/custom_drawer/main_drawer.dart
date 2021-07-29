@@ -4,17 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/drawerbloc/drawer_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/searchbloc/search_bloc.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/home/home_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/now_playing.dart';
-import 'package:moviedb_flutter/src/ui/movie/popular.dart';
-import 'package:moviedb_flutter/src/ui/movie/top_rated.dart';
-import 'package:moviedb_flutter/src/ui/movie/upcoming.dart';
-import 'package:moviedb_flutter/src/ui/search/sarch_screen.dart';
-import 'package:moviedb_flutter/src/ui/serie/serie_airingtoday.dart';
-import 'package:moviedb_flutter/src/ui/serie/serie_onair.dart';
-import 'package:moviedb_flutter/src/ui/serie/serie_popular.dart';
-import 'package:moviedb_flutter/src/ui/serie/serie_toprated.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/home/home_screen.dart';
+import 'package:moviedb_flutter/src/views/movie/now_playing.dart';
+import 'package:moviedb_flutter/src/views/movie/popular.dart';
+import 'package:moviedb_flutter/src/views/movie/top_rated.dart';
+import 'package:moviedb_flutter/src/views/movie/upcoming.dart';
+import 'package:moviedb_flutter/src/views/search/sarch_screen.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_airingtoday.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_onair.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_popular.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_toprated.dart';
 
 import 'custom_drawer.dart';
 
@@ -134,43 +134,6 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
         ),
       ),
     );
-
-    // return BlocProvider<DrawerBloc>(
-    //   create: (BuildContext context) => _bloc,
-    //   child: BlocListener<DrawerBloc, NavDrawerState>(
-    //     listener: (BuildContext context, NavDrawerState state) {
-    //       setState(() {
-    //         _content = _getContentForState(state);
-    //       });
-    //     },
-    //     child: BlocBuilder<DrawerBloc, NavDrawerState>(
-    //       builder: (BuildContext context, NavDrawerState state) => Scaffold(
-    //         drawer: CustomDrawer(),
-    //         appBar: AppBar(
-    //           backgroundColor: Colors.transparent,
-    //           elevation: 0,
-    //           iconTheme: IconThemeData(color: Colors.black87),
-    //           centerTitle: true,
-    //           title: Text(
-    //             state.selectedItem.description!.toUpperCase(),
-    //             style: Theme.of(context).textTheme.caption?.copyWith(
-    //                   color: Colors.black45,
-    //                   fontSize: 20,
-    //                   fontWeight: FontWeight.bold,
-    //                   fontFamily: 'muli',
-    //                 ),
-    //           ),
-    //         ),
-    //         body: AnimatedSwitcher(
-    //           // switchInCurve: Curves.easeInExpo,
-    //           // switchOutCurve: Curves.easeOutExpo,
-    //           duration: Duration(milliseconds: 50),
-    //           child: _content,
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 
   _getContentForState(NavDrawerState state) {

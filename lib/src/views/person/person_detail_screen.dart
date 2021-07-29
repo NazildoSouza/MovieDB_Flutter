@@ -9,11 +9,11 @@ import 'package:moviedb_flutter/src/extensions/extension.dart';
 import 'package:moviedb_flutter/src/model/credits.dart';
 import 'package:moviedb_flutter/src/model/images.dart';
 import 'package:moviedb_flutter/src/model/person.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/components/galery.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/movie_detail_screen.dart';
-import 'package:moviedb_flutter/src/ui/serie/serie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/components/galery.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/movie/movie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class PersonDetail extends StatelessWidget {

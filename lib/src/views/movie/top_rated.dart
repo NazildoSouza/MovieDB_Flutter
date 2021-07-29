@@ -7,9 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:moviedb_flutter/src/bloc/moviebloc/movie_bloc.dart';
 import 'package:moviedb_flutter/src/model/movie.dart';
-import 'package:moviedb_flutter/src/ui/components/delay.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/movie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/delay.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/movie/movie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../components/error_message_screen.dart';

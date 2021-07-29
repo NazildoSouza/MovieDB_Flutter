@@ -4,31 +4,31 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:moviedb_flutter/src/bloc/seriedetailbloc/serie_detail_bloc.dart';
+import 'package:moviedb_flutter/src/bloc/moviedetailbloc/movie_detail_bloc.dart';
 import 'package:moviedb_flutter/src/circle_progress/circle_progress_screen.dart';
+import 'package:moviedb_flutter/src/extensions/extension.dart';
 import 'package:moviedb_flutter/src/model/credits.dart';
 import 'package:moviedb_flutter/src/model/images.dart';
-import 'package:moviedb_flutter/src/model/serie_detail.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/components/galery.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/person/person_detail_screen.dart';
-import 'package:moviedb_flutter/src/ui/serie/series_seasons_screen.dart';
+import 'package:moviedb_flutter/src/model/movie_detail.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/components/galery.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/person/person_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SerieDetailScreen extends StatelessWidget {
-  const SerieDetailScreen(
-      {Key? key, required this.serieId, required this.paletteColor})
+class MovieDetailScreen extends StatelessWidget {
+  const MovieDetailScreen(
+      {Key? key, required this.movieId, required this.paletteColor})
       : super(key: key);
 
-  final int serieId;
+  final int movieId;
   final PaletteGenerator paletteColor;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SerieDetailBloc()..add(SerieDetailEventStated(serieId)),
+      create: (_) => MovieDetailBloc()..add(MovieDetailEventStated(movieId)),
       child: WillPopScope(
         child: Scaffold(
           body: _buildDetailBody(context),
@@ -41,12 +41,12 @@ class SerieDetailScreen extends StatelessWidget {
   Widget _buildDetailBody(BuildContext context) {
     // Color color = Colors.accents[Random().nextInt(Colors.accents.length)];
     var palette = paletteColor.mutedColor ?? paletteColor.dominantColor;
-    return BlocBuilder<SerieDetailBloc, SerieDetailState>(
+    return BlocBuilder<MovieDetailBloc, MovieDetailState>(
       builder: (context, state) {
-        if (state is SerieDetailLoading) {
+        if (state is MovieDetailLoading) {
           return LoadingScreen();
-        } else if (state is SerieDetailLoaded) {
-          SerieDetail serieDetail = state.detail;
+        } else if (state is MovieDetailLoaded) {
+          MovieDetail movieDetail = state.detail;
           return OrientationBuilder(
             builder: (context, orientaion) {
               return Stack(
@@ -70,7 +70,7 @@ class SerieDetailScreen extends StatelessWidget {
                               child: ClipRRect(
                                 child: CachedNetworkImage(
                                   imageUrl:
-                                      serieDetail.backdropString('original') ??
+                                      movieDetail.backdropString('original') ??
                                           '',
                                   height: MediaQuery.of(context).size.height,
                                   width: double.infinity,
@@ -116,11 +116,11 @@ class SerieDetailScreen extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
-                            (serieDetail.name ?? '').toUpperCase(),
+                            (movieDetail.title ?? '').toUpperCase(),
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: TextStyle(
-                              //   color: Colors.black87,
+                              // color: Colors.black87,
                               fontFamily: 'muli',
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
@@ -137,9 +137,12 @@ class SerieDetailScreen extends StatelessWidget {
                         child: Column(
                           children: [
                             Text(
-                              serieDetail.genresString,
+                              movieDetail.genresString,
                               maxLines: 2,
                               textAlign: TextAlign.center,
+                              // style: TextStyle(
+                              //     fontFamily: 'muli',
+                              //     color: Theme.of(context).hintColor),
                               style: Theme.of(context)
                                   .textTheme
                                   .subtitle2
@@ -154,7 +157,7 @@ class SerieDetailScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  serieDetail.dateString,
+                                  movieDetail.dateString,
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle2
@@ -172,7 +175,7 @@ class SerieDetailScreen extends StatelessWidget {
                                       ),
                                 ),
                                 Text(
-                                  serieDetail.timeString,
+                                  movieDetail.timeString,
                                   style: Theme.of(context)
                                       .textTheme
                                       .subtitle2
@@ -186,7 +189,7 @@ class SerieDetailScreen extends StatelessWidget {
                               height: 8,
                             ),
                             Text(
-                              serieDetail.statusString,
+                              movieDetail.statusString,
                               maxLines: 2,
                               textAlign: TextAlign.center,
                               style: TextStyle(
@@ -206,7 +209,7 @@ class SerieDetailScreen extends StatelessWidget {
                               height: 60,
                               width: 60,
                               child: RadialChart(
-                                  voteAverage: serieDetail.voteAverage ?? 0),
+                                  voteAverage: movieDetail.voteAverage ?? 0),
                             ),
                             Text(
                               'Avaliação dos Usuários',
@@ -222,13 +225,13 @@ class SerieDetailScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      if (serieDetail.tagline != null &&
-                          serieDetail.tagline!.isNotEmpty) ...[
+                      if (movieDetail.tagline != null &&
+                          movieDetail.tagline!.isNotEmpty) ...[
                         Divider(),
                         Padding(
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
-                            serieDetail.tagline!,
+                            movieDetail.tagline!,
                             style:
                                 Theme.of(context).textTheme.subtitle2?.copyWith(
                                       color: Theme.of(context).hintColor,
@@ -240,10 +243,10 @@ class SerieDetailScreen extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (serieDetail.overview != null &&
-                          serieDetail.overview!.isNotEmpty) ...[
-                        if (serieDetail.tagline == null ||
-                            serieDetail.tagline!.isEmpty)
+                      if (movieDetail.overview != null &&
+                          movieDetail.overview!.isNotEmpty) ...[
+                        if (movieDetail.tagline == null ||
+                            movieDetail.tagline!.isEmpty)
                           Divider(),
                         Container(
                           child: Padding(
@@ -263,140 +266,7 @@ class SerieDetailScreen extends StatelessWidget {
                           child: Container(
                             // height: 35,
                             child: Text(
-                              (serieDetail.overview ?? ''),
-                              // maxLines: 2,
-                              // overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontFamily: 'muli'),
-                            ),
-                          ),
-                        ),
-                      ],
-                      Divider(),
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Episódios:'.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                      ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  '${(serieDetail.numberOfEpisodes ?? 0)}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      ?.copyWith(
-                                        //  fontSize: 12,
-                                        fontFamily: 'muli',
-                                      ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 20.0),
-                              child: Text(
-                                ' - ',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .subtitle2
-                                    ?.copyWith(
-                                      //  fontSize: 12,
-                                      fontFamily: 'muli',
-                                    ),
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Temporadas:'.toUpperCase(),
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .caption
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'muli',
-                                      ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  '${(serieDetail.numberOfSeasons ?? 0)}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      ?.copyWith(
-                                        //   fontSize: 12,
-                                        fontFamily: 'muli',
-                                      ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      if (serieDetail.seasons != null &&
-                          serieDetail.seasons!.length > 0) ...[
-                        Divider(),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SerieSeasons(
-                                  serie: serieDetail,
-                                  palette: palette,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Text(
-                            serieDetail.seasons!.length > 1
-                                ? 'Exibir Temporadas'
-                                : 'Exibir Temporada',
-                          ),
-                        ),
-                      ],
-                      if (serieDetail.createdString != '--') ...[
-                        // if (serieDetail.tagline == null ||
-                        //     serieDetail.tagline!.isEmpty)
-                        Divider(),
-                        Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              serieDetail.createdBy!.length > 1
-                                  ? 'Criadores'
-                                  : 'Criador'.toUpperCase(),
-                              style:
-                                  Theme.of(context).textTheme.caption?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Container(
-                            // height: 35,
-                            child: Text(
-                              (serieDetail.createdString),
+                              (movieDetail.overview ?? ''),
                               // maxLines: 2,
                               // overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontFamily: 'muli'),
@@ -408,11 +278,90 @@ class SerieDetailScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          //  Divider(),
-
-                          if (serieDetail.serieImage != null &&
-                              serieDetail.serieImage!.backdrops != null &&
-                              serieDetail.serieImage!.backdrops!.length >
+                          Divider(),
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Orçamento:'.toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'muli',
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      movieDetail.budget?.formattedPrice() ??
+                                          '--',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          ?.copyWith(
+                                            //  fontSize: 12,
+                                            fontFamily: 'muli',
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Text(
+                                    ' - ',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .subtitle2
+                                        ?.copyWith(
+                                          //   fontSize: 12,
+                                          fontFamily: 'muli',
+                                        ),
+                                  ),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Receita:'.toUpperCase(),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .caption
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'muli',
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      movieDetail.revenue?.formattedPrice() ??
+                                          '--',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .subtitle2
+                                          ?.copyWith(
+                                            //   fontSize: 12,
+                                            fontFamily: 'muli',
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          if (movieDetail.movieImage != null &&
+                              movieDetail.movieImage!.backdrops != null &&
+                              movieDetail.movieImage!.backdrops!.length >
                                   0) ...[
                             Divider(),
                             Padding(
@@ -441,10 +390,10 @@ class SerieDetailScreen extends StatelessWidget {
                                 ),
                                 scrollDirection: Axis.horizontal,
                                 itemCount:
-                                    serieDetail.serieImage!.backdrops!.length,
+                                    movieDetail.movieImage!.backdrops!.length,
                                 itemBuilder: (context, index) {
                                   Screenshot image =
-                                      serieDetail.serieImage!.backdrops![index];
+                                      movieDetail.movieImage!.backdrops![index];
                                   return GestureDetector(
                                     onTap: () {
                                       Navigator.push(
@@ -452,8 +401,8 @@ class SerieDetailScreen extends StatelessWidget {
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               GalleryPhotoViewWrapper(
-                                            galleryItems: serieDetail
-                                                .serieImage!.backdrops!,
+                                            galleryItems: movieDetail
+                                                .movieImage!.backdrops!,
                                             backgroundDecoration:
                                                 const BoxDecoration(
                                               color: Colors.black,
@@ -526,9 +475,9 @@ class SerieDetailScreen extends StatelessWidget {
                               height: 5,
                             ),
                           ],
-                          if (serieDetail.credits != null &&
-                              serieDetail.credits!.cast != null &&
-                              serieDetail.credits!.cast!.length > 0) ...[
+                          if (movieDetail.credits != null &&
+                              movieDetail.credits!.cast != null &&
+                              movieDetail.credits!.cast!.length > 0) ...[
                             Divider(),
                             Padding(
                               padding: const EdgeInsets.all(15.0),
@@ -555,9 +504,9 @@ class SerieDetailScreen extends StatelessWidget {
                                   color: Colors.transparent,
                                   width: 5,
                                 ),
-                                itemCount: serieDetail.credits!.cast!.length,
+                                itemCount: movieDetail.credits!.cast!.length,
                                 itemBuilder: (context, index) {
-                                  Cast cast = serieDetail.credits!.cast![index];
+                                  Cast cast = movieDetail.credits!.cast![index];
                                   return GestureDetector(
                                     onTap: () async {
                                       late PaletteGenerator paletteGenerator;
@@ -668,7 +617,9 @@ class SerieDetailScreen extends StatelessWidget {
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
-                                                  //  color: Colors.black54,
+                                                  // color: Theme.of(context)
+                                                  //     .selectedRowColor
+                                                  //     .withOpacity(0.7),
                                                   fontSize: 10,
                                                   fontFamily: 'muli',
                                                 ),
@@ -684,7 +635,7 @@ class SerieDetailScreen extends StatelessWidget {
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  //   color: Colors.black54,
+                                                  // color: Colors.black54,
                                                   fontSize: 10,
                                                   fontFamily: 'muli',
                                                 ),
@@ -699,9 +650,9 @@ class SerieDetailScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                          if (serieDetail.credits != null &&
-                              serieDetail.credits!.crew != null &&
-                              serieDetail.credits!.crew!.length > 0) ...[
+                          if (movieDetail.credits != null &&
+                              movieDetail.credits!.crew != null &&
+                              movieDetail.credits!.crew!.length > 0) ...[
                             Divider(),
                             Padding(
                               padding: const EdgeInsets.all(15.0),
@@ -728,18 +679,24 @@ class SerieDetailScreen extends StatelessWidget {
                                   color: Colors.transparent,
                                   width: 5,
                                 ),
-                                itemCount: serieDetail.credits!.crew!.length,
+                                itemCount: movieDetail.credits!.crew!.length,
                                 itemBuilder: (context, index) {
-                                  Cast crew = serieDetail.credits!.crew![index];
+                                  Cast crew = movieDetail.credits!.crew![index];
                                   return GestureDetector(
                                     onTap: () async {
-                                      var paletteGenerator =
-                                          await PaletteGenerator
-                                              .fromImageProvider(
-                                                  CachedNetworkImageProvider(
-                                                      crew.profileString(
-                                                              'w200') ??
-                                                          ''));
+                                      late PaletteGenerator paletteGenerator;
+                                      if (crew.profileString('w200') != null) {
+                                        paletteGenerator =
+                                            await PaletteGenerator
+                                                .fromImageProvider(
+                                                    CachedNetworkImageProvider(
+                                                        crew.profileString(
+                                                            'w200')!));
+                                      } else {
+                                        paletteGenerator = await PaletteGenerator
+                                            .fromImageProvider(AssetImage(
+                                                'assets/images/img_not_found.jpg'));
+                                      }
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
@@ -830,7 +787,7 @@ class SerieDetailScreen extends StatelessWidget {
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
-                                                  //     color: Colors.black54,
+                                                  //   color: Colors.black54,
                                                   fontSize: 10,
                                                   fontFamily: 'muli',
                                                 ),
@@ -845,7 +802,7 @@ class SerieDetailScreen extends StatelessWidget {
                                                 overflow: TextOverflow.ellipsis,
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
-                                                  //     color: Colors.black54,
+                                                  //   color: Colors.black54,
                                                   fontSize: 10,
                                                   fontFamily: 'muli',
                                                 ),
@@ -860,9 +817,9 @@ class SerieDetailScreen extends StatelessWidget {
                               ),
                             ),
                           ],
-                          if (serieDetail.videos != null &&
-                              serieDetail.videos!.results != null &&
-                              serieDetail.videos!.results!.length > 0) ...[
+                          if (movieDetail.videos != null &&
+                              movieDetail.videos!.results != null &&
+                              movieDetail.videos!.results!.length > 0) ...[
                             Divider(),
                             Padding(
                               padding: const EdgeInsets.all(15.0),
@@ -878,7 +835,7 @@ class SerieDetailScreen extends StatelessWidget {
                               ),
                             ),
                             Column(
-                              children: serieDetail.videos!.results!.map((e) {
+                              children: movieDetail.videos!.results!.map((e) {
                                 return TextButton(
                                   onPressed: () async {
                                     if (await canLaunch(e.youtubeURL!)) {
@@ -925,7 +882,7 @@ class SerieDetailScreen extends StatelessWidget {
                           child: ClipRRect(
                             child: CachedNetworkImage(
                               imageUrl:
-                                  serieDetail.backdropString('original') ?? '',
+                                  movieDetail.backdropString('original') ?? '',
                               height: MediaQuery.of(context).size.height / 3.5,
                               width: double.infinity,
                               fit: BoxFit.cover,
@@ -1001,13 +958,13 @@ class SerieDetailScreen extends StatelessWidget {
               );
             },
           );
-        } else if (state is SerieDetailError) {
+        } else if (state is MovieDetailError) {
           return ErrorMessage(
             message: state.message,
             onTap: () {
               context
-                  .read<SerieDetailBloc>()
-                  .add(SerieDetailEventStated(serieId));
+                  .read<MovieDetailBloc>()
+                  .add(MovieDetailEventStated(movieId));
             },
           );
         } else {

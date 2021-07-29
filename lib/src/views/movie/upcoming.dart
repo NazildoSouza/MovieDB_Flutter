@@ -7,27 +7,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:moviedb_flutter/src/bloc/moviebloc/movie_bloc.dart';
 import 'package:moviedb_flutter/src/model/movie.dart';
-import 'package:moviedb_flutter/src/ui/components/delay.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/movie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/delay.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/movie/movie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
-class NowPlaying extends StatefulWidget {
-  const NowPlaying({Key? key}) : super(key: key);
+import '../components/error_message_screen.dart';
+
+class Upcoming extends StatefulWidget {
+  const Upcoming({Key? key}) : super(key: key);
 
   @override
-  _NowPlayingState createState() => _NowPlayingState();
+  _UpcomingState createState() => _UpcomingState();
 }
 
-class _NowPlayingState extends State<NowPlaying> {
+class _UpcomingState extends State<Upcoming> {
   int page = 1;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      lazy: false,
-      create: (_) => MovieBloc()..add(MovieEventNowPlaying(1)),
+      create: (_) => MovieBloc()..add(MovieEventUpcoming(1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,8 +35,8 @@ class _NowPlayingState extends State<NowPlaying> {
   _loadMore(BuildContext context, MovieLoaded state) async {
     if (state.movieResponse.page == page) {
       page++;
+      BlocProvider.of<MovieBloc>(context)..add(MovieEventUpcoming(page));
 
-      BlocProvider.of<MovieBloc>(context)..add(MovieEventNowPlaying(page));
       await Future.delayed(delay);
       setState(() {});
     }
@@ -54,7 +54,7 @@ class _NowPlayingState extends State<NowPlaying> {
               builder: (context, orientation) {
                 Color color = Colors.grey.shade200;
                 return GridView.builder(
-                  // physics: BouncingScrollPhysics(),
+                  //   physics: BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(2.0),
                   itemCount: state.movieResponse.results?.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -178,7 +178,7 @@ class _NowPlayingState extends State<NowPlaying> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<MovieBloc>().add(MovieEventNowPlaying(page));
+              context.read<MovieBloc>().add(MovieEventUpcoming(page));
             },
           );
         } else {

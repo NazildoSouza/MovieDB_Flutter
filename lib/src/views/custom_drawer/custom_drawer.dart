@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb_flutter/src/ui/custom_drawer/page_section.dart';
-import 'package:moviedb_flutter/src/ui/custom_drawer/page_section_movies.dart';
-import 'package:moviedb_flutter/src/ui/custom_drawer/page_section_series.dart';
+import 'package:moviedb_flutter/src/views/custom_drawer/page_section.dart';
+import 'package:moviedb_flutter/src/views/custom_drawer/page_section_movies.dart';
+import 'package:moviedb_flutter/src/views/custom_drawer/page_section_series.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override

@@ -7,27 +7,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:moviedb_flutter/src/bloc/seriebloc/serie_bloc.dart';
 import 'package:moviedb_flutter/src/model/serie.dart';
-import 'package:moviedb_flutter/src/ui/components/delay.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/serie/serie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/delay.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../components/error_message_screen.dart';
 
-class SerieAiringToday extends StatefulWidget {
-  const SerieAiringToday({Key? key}) : super(key: key);
+class SeriePopular extends StatefulWidget {
+  const SeriePopular({Key? key}) : super(key: key);
 
   @override
-  _SerieAiringTodayState createState() => _SerieAiringTodayState();
+  _SeriePopularState createState() => _SeriePopularState();
 }
 
-class _SerieAiringTodayState extends State<SerieAiringToday> {
+class _SeriePopularState extends State<SeriePopular> {
   int page = 1;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SerieBloc()..add(SerieEventAiringToday(1)),
+      create: (_) => SerieBloc()..add(SerieEventPopular(1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,7 +35,7 @@ class _SerieAiringTodayState extends State<SerieAiringToday> {
   _loadMore(BuildContext context, SerieLoaded state) async {
     if (state.serieResponse.page == page) {
       page++;
-      BlocProvider.of<SerieBloc>(context)..add(SerieEventAiringToday(page));
+      BlocProvider.of<SerieBloc>(context)..add(SerieEventPopular(page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -54,7 +54,7 @@ class _SerieAiringTodayState extends State<SerieAiringToday> {
               builder: (context, orientation) {
                 Color color = Colors.grey.shade200;
                 return GridView.builder(
-                  //  physics: BouncingScrollPhysics(),
+                  //   physics: BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(2.0),
                   itemCount: state.serieResponse.results?.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -178,7 +178,7 @@ class _SerieAiringTodayState extends State<SerieAiringToday> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<SerieBloc>().add(SerieEventAiringToday(page));
+              context.read<SerieBloc>().add(SerieEventPopular(page));
             },
           );
         } else {

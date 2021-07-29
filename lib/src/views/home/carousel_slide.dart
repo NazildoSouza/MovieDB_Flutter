@@ -7,9 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/moviebloc/movie_bloc.dart';
 import 'package:moviedb_flutter/src/model/movie.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/movie_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/movie/movie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class CarouselSlideMovie extends StatelessWidget {
@@ -20,7 +20,7 @@ class CarouselSlideMovie extends StatelessWidget {
     return BlocBuilder<MovieBloc, MovieState>(
       builder: (context, state) {
         if (state is MovieLoading) {
-          return LoadingScreen();
+          return Container(height: 310, child: LoadingScreen());
         } else if (state is MovieLoaded) {
           List<Movie> movies = state.movieResponse.results ?? <Movie>[];
           return Column(

@@ -5,37 +5,37 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
-import 'package:moviedb_flutter/src/bloc/moviebloc/movie_bloc.dart';
-import 'package:moviedb_flutter/src/model/movie.dart';
-import 'package:moviedb_flutter/src/ui/components/delay.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/movie/movie_detail_screen.dart';
+import 'package:moviedb_flutter/src/bloc/seriebloc/serie_bloc.dart';
+import 'package:moviedb_flutter/src/model/serie.dart';
+import 'package:moviedb_flutter/src/views/components/delay.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/serie/serie_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 import '../components/error_message_screen.dart';
 
-class Upcoming extends StatefulWidget {
-  const Upcoming({Key? key}) : super(key: key);
+class SerieOnAir extends StatefulWidget {
+  const SerieOnAir({Key? key}) : super(key: key);
 
   @override
-  _UpcomingState createState() => _UpcomingState();
+  _SerieOnAirState createState() => _SerieOnAirState();
 }
 
-class _UpcomingState extends State<Upcoming> {
+class _SerieOnAirState extends State<SerieOnAir> {
   int page = 1;
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MovieBloc()..add(MovieEventUpcoming(1)),
+      create: (_) => SerieBloc()..add(SerieEventOnAir(1)),
       child: _widgetNowPlaying(context),
     );
   }
 
-  _loadMore(BuildContext context, MovieLoaded state) async {
-    if (state.movieResponse.page == page) {
+  _loadMore(BuildContext context, SerieLoaded state) async {
+    if (state.serieResponse.page == page) {
       page++;
-      BlocProvider.of<MovieBloc>(context)..add(MovieEventUpcoming(page));
+      BlocProvider.of<SerieBloc>(context)..add(SerieEventOnAir(page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -43,11 +43,11 @@ class _UpcomingState extends State<Upcoming> {
   }
 
   _widgetNowPlaying(BuildContext context) {
-    return BlocBuilder<MovieBloc, MovieState>(
+    return BlocBuilder<SerieBloc, SerieState>(
       builder: (context, state) {
-        if (state is MovieLoading) {
+        if (state is SerieLoading) {
           return LoadingScreen();
-        } else if (state is MovieLoaded) {
+        } else if (state is SerieLoaded) {
           return LazyLoadScrollView(
             onEndOfPage: () => _loadMore(context, state),
             child: OrientationBuilder(
@@ -56,7 +56,7 @@ class _UpcomingState extends State<Upcoming> {
                 return GridView.builder(
                   //   physics: BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(2.0),
-                  itemCount: state.movieResponse.results?.length,
+                  itemCount: state.serieResponse.results?.length,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: orientation == Orientation.portrait ? 2 : 4,
                     mainAxisSpacing: 2,
@@ -64,16 +64,16 @@ class _UpcomingState extends State<Upcoming> {
                     childAspectRatio: 0.65,
                   ),
                   itemBuilder: (context, index) {
-                    Movie movie =
-                        state.movieResponse.results?[index] ?? Movie();
+                    Serie serie =
+                        state.serieResponse.results?[index] ?? Serie();
                     return GestureDetector(
                       onTap: () async {
                         late PaletteGenerator paletteGenerator;
-                        if (movie.posterString('w200') != null) {
+                        if (serie.posterString('w200') != null) {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
                                   CachedNetworkImageProvider(
-                                      movie.posterString('w200')!));
+                                      serie.posterString('w200')!));
                         } else {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
@@ -83,8 +83,8 @@ class _UpcomingState extends State<Upcoming> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => MovieDetailScreen(
-                              movieId: movie.id ?? 0,
+                            builder: (context) => SerieDetailScreen(
+                              serieId: serie.id ?? 0,
                               paletteColor: paletteGenerator,
                             ),
                           ),
@@ -100,7 +100,7 @@ class _UpcomingState extends State<Upcoming> {
                           borderRadius: BorderRadius.circular(12),
                           clipBehavior: Clip.antiAlias,
                           child: CachedNetworkImage(
-                            imageUrl: movie.posterString('w200') ?? '',
+                            imageUrl: serie.posterString('w200') ?? '',
                             imageBuilder: (context, imageProvider) {
                               return Container(
                                 width: 180,
@@ -151,7 +151,7 @@ class _UpcomingState extends State<Upcoming> {
                                       color: Colors.black54,
                                     ),
                                     child: Text(
-                                      (movie.title ?? ''),
+                                      (serie.name ?? ''),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         color: Colors.white,
@@ -174,11 +174,11 @@ class _UpcomingState extends State<Upcoming> {
               },
             ),
           );
-        } else if (state is MovieError) {
+        } else if (state is SerieError) {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<MovieBloc>().add(MovieEventUpcoming(page));
+              context.read<SerieBloc>().add(SerieEventOnAir(page));
             },
           );
         } else {

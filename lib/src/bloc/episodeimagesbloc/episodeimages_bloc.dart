@@ -29,16 +29,15 @@ class EpisodeimagesBloc extends Bloc<EpisodeimagesEvent, EpisodeimagesState> {
       int serieId, int seasonNumber, Episode episode) async* {
     yield EpisodeImagesLoading();
     try {
-      if (episode.images == null) {
-        final response = await _dio.get(
-            '/tv/$serieId/season/$seasonNumber/episode/${episode.episodeNumber ?? 1}/images');
-        List<Screenshot> images = List<Screenshot>.from(
-            response.data["stills"].map((x) => Screenshot.fromJson(x)));
+      final response = await _dio.get(
+          '/tv/$serieId/season/$seasonNumber/episode/${episode.episodeNumber ?? 1}/images');
+      List<Screenshot> images = List<Screenshot>.from(
+          response.data["stills"].map((x) => Screenshot.fromJson(x)));
 
-        episode.images = List<Screenshot>.from(images);
-      }
+      episode.images = List<Screenshot>.from(images);
 
-      yield EpisodeImagesLoaded(episode.images != null);
+      yield EpisodeImagesLoaded(
+          (episode.images != null && episode.images!.length > 0));
     } on DioError catch (error) {
       if (error.response != null) {
         yield EpisodeImagesError(error.response?.data['status_message']);

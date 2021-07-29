@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/personbloc/person_bloc.dart';
 import 'package:moviedb_flutter/src/model/person.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/person/person_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/person/person_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class PersonList extends StatelessWidget {
@@ -19,7 +19,7 @@ class PersonList extends StatelessWidget {
     return BlocBuilder<PersonBloc, PersonState>(
       builder: (context, state) {
         if (state is PersonLoading) {
-          return Container(height: 130, child: LoadingScreen());
+          return Container(height: 150, child: LoadingScreen());
         } else if (state is ListPersonLoaded) {
           List<Person> personList = state.personList;
           return Column(

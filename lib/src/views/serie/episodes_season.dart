@@ -10,10 +10,10 @@ import 'package:moviedb_flutter/src/extensions/extension.dart';
 import 'package:moviedb_flutter/src/model/credits.dart';
 import 'package:moviedb_flutter/src/model/images.dart';
 import 'package:moviedb_flutter/src/model/season.dart';
-import 'package:moviedb_flutter/src/ui/components/error_message_screen.dart';
-import 'package:moviedb_flutter/src/ui/components/galery.dart';
-import 'package:moviedb_flutter/src/ui/components/loading_screen.dart';
-import 'package:moviedb_flutter/src/ui/person/person_detail_screen.dart';
+import 'package:moviedb_flutter/src/views/components/error_message_screen.dart';
+import 'package:moviedb_flutter/src/views/components/galery.dart';
+import 'package:moviedb_flutter/src/views/components/loading_screen.dart';
+import 'package:moviedb_flutter/src/views/person/person_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 
 class EpisodesSeason extends StatelessWidget {
@@ -97,11 +97,15 @@ class EpisodeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<EpisodeimagesBloc>(
-      create: (_) => EpisodeimagesBloc()
-        ..add(EpisodeImagesEventStated(serieId, seasonNumber, episode)),
-      child: _buildEpisode(context),
-    );
+    if (episode.images == null) {
+      return BlocProvider<EpisodeimagesBloc>(
+        create: (_) => EpisodeimagesBloc()
+          ..add(EpisodeImagesEventStated(serieId, seasonNumber, episode)),
+        child: _buildEpisode(context),
+      );
+    } else {
+      return _buildEpisode(context);
+    }
   }
 
   Widget _buildEpisode(BuildContext context) {
@@ -191,120 +195,32 @@ class EpisodeView extends StatelessWidget {
               style: TextStyle(fontFamily: 'muli'),
             ),
           ),
-        BlocBuilder<EpisodeimagesBloc, EpisodeimagesState>(
-            builder: (context, state) {
-          if (state is EpisodeImagesLoading) {
-            return Container(height: 190, child: LoadingScreen());
-          } else if (state is EpisodeImagesLoaded) {
-            bool containImages = state.containImages;
+        if (episode.images == null)
+          BlocBuilder<EpisodeimagesBloc, EpisodeimagesState>(
+              builder: (context, state) {
+            if (state is EpisodeImagesLoading) {
+              return Container(height: 190, child: LoadingScreen());
+            } else if (state is EpisodeImagesLoaded) {
+              bool containImages = state.containImages;
 
-            if (containImages &&
-                episode.images != null &&
-                episode.images!.length > 0)
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Divider(),
-                  Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Text(
-                      'Imagens'.toUpperCase(),
-                      style: Theme.of(context).textTheme.caption?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'muli',
-                          ),
-                    ),
-                  ),
-                  Container(
-                    height: 155,
-                    child: ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      separatorBuilder: (context, index) => VerticalDivider(
-                        color: Colors.transparent,
-                        width: 5,
-                      ),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: episode.images!.length,
-                      itemBuilder: (context, index) {
-                        Screenshot image = episode.images![index];
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => GalleryPhotoViewWrapper(
-                                  galleryItems: episode.images!,
-                                  backgroundDecoration: const BoxDecoration(
-                                    color: Colors.black,
-                                  ),
-                                  initialIndex: index,
-                                  // scrollDirection: verticalGallery
-                                  //     ? Axis.vertical
-                                  //     : Axis.horizontal,
-                                ),
-                              ),
-                            );
-                          },
-                          child: Hero(
-                            tag: image.filePath!,
-                            child: Card(
-                              clipBehavior: Clip.antiAlias,
-                              elevation: 3,
-                              borderOnForeground: true,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: ClipRRect(
-                                //  borderRadius: BorderRadius.circular(12),
-                                child: CachedNetworkImage(
-                                  imageUrl: image.imageString('original') ?? '',
-                                  placeholder: (context, url) => Platform
-                                          .isAndroid
-                                      ? Container(
-                                          width: 255,
-                                          height: 155,
-                                          color: palette?.color,
-                                          child: Center(
-                                              child: CircularProgressIndicator(
-                                            color: palette?.titleTextColor,
-                                          )),
-                                        )
-                                      : Container(
-                                          width: 255,
-                                          height: 155,
-                                          color: palette?.color,
-                                          child: CupertinoActivityIndicator(),
-                                        ),
-                                  fit: BoxFit.cover,
-                                  errorWidget: (context, url, error) =>
-                                      Container(
-                                    color: palette?.color,
-                                    width: 100,
-                                    height: 100,
-                                    child: Icon(
-                                      Icons.photo,
-                                      color: palette?.titleTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                ],
+              if (containImages &&
+                  episode.images != null &&
+                  episode.images!.length > 0) return _images(context);
+              return Container();
+            } else if (state is EpisodeImagesError) {
+              return ErrorMessage(
+                message: state.message,
+                onTap: () {
+                  context.read<EpisodeimagesBloc>().add(
+                      EpisodeImagesEventStated(serieId, seasonNumber, episode));
+                },
               );
-            return Container();
-          } else {
-            return Container();
-          }
-        }),
+            } else {
+              return Container();
+            }
+          }),
+        if (episode.images != null && episode.images!.length > 0)
+          _images(context),
         if (episode.guestStars != null && episode.guestStars!.length > 0) ...[
           Divider(),
           Padding(
@@ -603,6 +519,106 @@ class EpisodeView extends StatelessWidget {
         SizedBox(
           height: 15,
         )
+      ],
+    );
+  }
+
+  Widget _images(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Divider(),
+        Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: Text(
+            'Imagens'.toUpperCase(),
+            style: Theme.of(context).textTheme.caption?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'muli',
+                ),
+          ),
+        ),
+        Container(
+          height: 155,
+          child: ListView.separated(
+            physics: BouncingScrollPhysics(),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            separatorBuilder: (context, index) => VerticalDivider(
+              color: Colors.transparent,
+              width: 5,
+            ),
+            scrollDirection: Axis.horizontal,
+            itemCount: episode.images!.length,
+            itemBuilder: (context, index) {
+              Screenshot image = episode.images![index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => GalleryPhotoViewWrapper(
+                        galleryItems: episode.images!,
+                        backgroundDecoration: const BoxDecoration(
+                          color: Colors.black,
+                        ),
+                        initialIndex: index,
+                        // scrollDirection: verticalGallery
+                        //     ? Axis.vertical
+                        //     : Axis.horizontal,
+                      ),
+                    ),
+                  );
+                },
+                child: Hero(
+                  tag: image.filePath!,
+                  child: Card(
+                    clipBehavior: Clip.antiAlias,
+                    elevation: 3,
+                    borderOnForeground: true,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ClipRRect(
+                      //  borderRadius: BorderRadius.circular(12),
+                      child: CachedNetworkImage(
+                        imageUrl: image.imageString('original') ?? '',
+                        placeholder: (context, url) => Platform.isAndroid
+                            ? Container(
+                                width: 255,
+                                height: 155,
+                                color: palette?.color,
+                                child: Center(
+                                    child: CircularProgressIndicator(
+                                  color: palette?.titleTextColor,
+                                )),
+                              )
+                            : Container(
+                                width: 255,
+                                height: 155,
+                                color: palette?.color,
+                                child: CupertinoActivityIndicator(),
+                              ),
+                        fit: BoxFit.cover,
+                        errorWidget: (context, url, error) => Container(
+                          color: palette?.color,
+                          width: 100,
+                          height: 100,
+                          child: Icon(
+                            Icons.photo,
+                            color: palette?.titleTextColor,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          height: 5,
+        ),
       ],
     );
   }
