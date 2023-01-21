@@ -12,6 +12,6 @@ extension DateTimeExtension on DateTime {
 
 extension NumberExtension on num {
   String formattedPrice() {
-    return NumberFormat('R\$###,##0.00', 'pt-BR').format(this);
+    return NumberFormat('\$###,##0.00', 'pt-BR').format(this);
   }
 }

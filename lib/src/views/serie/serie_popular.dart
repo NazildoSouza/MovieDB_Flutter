@@ -27,7 +27,8 @@ class _SeriePopularState extends State<SeriePopular> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SerieBloc()..add(SerieEventPopular(1)),
+      create: (_) =>
+          SerieBloc()..add(SerieEventPopular(endPoint: 'popular', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,7 +36,8 @@ class _SeriePopularState extends State<SeriePopular> {
   _loadMore(BuildContext context, SerieLoaded state) async {
     if (state.serieResponse.page == page) {
       page++;
-      BlocProvider.of<SerieBloc>(context)..add(SerieEventPopular(page));
+      BlocProvider.of<SerieBloc>(context)
+        ..add(SerieEventPopular(endPoint: 'popular', page: page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -178,7 +180,9 @@ class _SeriePopularState extends State<SeriePopular> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<SerieBloc>().add(SerieEventPopular(page));
+              context
+                  .read<SerieBloc>()
+                  .add(SerieEventPopular(endPoint: 'popular', page: page));
             },
           );
         } else {

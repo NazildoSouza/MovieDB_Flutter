@@ -11,41 +11,35 @@ part 'movie_detail_event.dart';
 part 'movie_detail_state.dart';
 
 class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
-  MovieDetailBloc() : super(MovieDetailLoading());
+  MovieDetailBloc() : super(MovieDetailLoading()) {
+    on<MovieDetailEventStated>(_mapMovieEventStartedToState);
+  }
 
   final Dio _dio = Dio(kDioOptionsMovieDetail);
   final Dio _dioImages = Dio(kDioOptionsMovieImages);
 
-  @override
-  Stream<MovieDetailState> mapEventToState(
-    MovieDetailEvent event,
-  ) async* {
-    if (event is MovieDetailEventStated) {
-      yield* _mapMovieEventStartedToState(event.id);
-    }
-  }
-
-  Stream<MovieDetailState> _mapMovieEventStartedToState(int id) async* {
-    yield MovieDetailLoading();
+  Future<void> _mapMovieEventStartedToState(
+      MovieDetailEventStated event, Emitter<MovieDetailState> emit) async {
+    emit(MovieDetailLoading());
     try {
-      final response = await _dio.get('/movie/$id');
+      final response = await _dio.get('/movie/${event.id}');
       MovieDetail movieDetail = MovieDetail.fromJson(response.data);
 
-      final imagesResponse = await _dioImages.get('/movie/$id/images');
+      final imagesResponse = await _dioImages.get('/movie/${event.id}/images');
       ImagesResponse imageResponse =
           ImagesResponse.fromJson(imagesResponse.data);
 
       movieDetail.movieImage = imageResponse;
 
-      yield MovieDetailLoaded(movieDetail);
+      emit(MovieDetailLoaded(movieDetail));
     } on DioError catch (error) {
       if (error.response != null) {
-        yield MovieDetailError(error.response?.data['status_message']);
+        emit(MovieDetailError(error.response?.data['status_message']));
       } else {
-        yield MovieDetailError('Erro de conexão, verifique sua internet!!');
+        emit(MovieDetailError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (_) {
-      yield MovieDetailError('Erro desconhecido.');
+      emit(MovieDetailError('Erro desconhecido.'));
     }
   }
 }

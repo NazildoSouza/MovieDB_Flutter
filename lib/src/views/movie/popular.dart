@@ -27,7 +27,8 @@ class _PopularState extends State<Popular> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MovieBloc()..add(MovieEventPopular(1)),
+      create: (_) =>
+          MovieBloc()..add(MovieEventPopular(endPoint: 'popular', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -36,7 +37,8 @@ class _PopularState extends State<Popular> {
     if (state.movieResponse.page == page) {
       page++;
 
-      BlocProvider.of<MovieBloc>(context)..add(MovieEventPopular(page));
+      BlocProvider.of<MovieBloc>(context)
+        ..add(MovieEventPopular(endPoint: 'popular', page: page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -179,7 +181,9 @@ class _PopularState extends State<Popular> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<MovieBloc>().add(MovieEventPopular(page));
+              context
+                  .read<MovieBloc>()
+                  .add(MovieEventPopular(endPoint: 'popular', page: page));
             },
           );
         } else {

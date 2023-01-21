@@ -27,7 +27,8 @@ class _TopRatedState extends State<TopRated> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MovieBloc()..add(MovieEventTopRated(1)),
+      create: (_) =>
+          MovieBloc()..add(MovieEventTopRated(endPoint: 'top_rated', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,7 +36,8 @@ class _TopRatedState extends State<TopRated> {
   _loadMore(BuildContext context, MovieLoaded state) async {
     if (state.movieResponse.page == page) {
       page++;
-      BlocProvider.of<MovieBloc>(context)..add(MovieEventTopRated(page));
+      BlocProvider.of<MovieBloc>(context)
+        ..add(MovieEventTopRated(endPoint: 'top_rated', page: page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -178,7 +180,9 @@ class _TopRatedState extends State<TopRated> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<MovieBloc>().add(MovieEventTopRated(page));
+              context
+                  .read<MovieBloc>()
+                  .add(MovieEventTopRated(endPoint: 'top_rated', page: page));
             },
           );
         } else {

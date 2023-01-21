@@ -154,7 +154,9 @@ class CarouselSlideMovie extends StatelessWidget {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<MovieBloc>().add(MovieEventStarted(1));
+              context
+                  .read<MovieBloc>()
+                  .add(MovieEventStarted(endPoint: 'now_playing', page: 1));
             },
           );
         } else {

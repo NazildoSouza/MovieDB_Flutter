@@ -32,16 +32,13 @@ class PersonDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => PersonBloc()..add(PersonEventDetail(personId)),
-      child: WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(personName),
-            //  backgroundColor: Colors.transparent,
-            elevation: 0,
-          ),
-          body: _buildDetailBody(context),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(personName),
+          //  backgroundColor: Colors.transparent,
+          elevation: 0,
         ),
-        onWillPop: () async => true,
+        body: _buildDetailBody(context),
       ),
     );
   }

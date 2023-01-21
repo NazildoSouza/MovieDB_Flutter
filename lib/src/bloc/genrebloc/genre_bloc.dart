@@ -10,56 +10,50 @@ part 'genre_event.dart';
 part 'genre_state.dart';
 
 class GenreBloc extends Bloc<GenreEvent, GenreState> {
-  GenreBloc() : super(GenreLoading());
+  GenreBloc() : super(GenreLoading()) {
+    on<GenreMovieEventStarted>(_mapMovieEventStateToState);
+    on<GenreSerieEventStarted>(_mapSerieEventStateToState);
+  }
 
   final Dio _dio = Dio(kDioOptions);
 
-  @override
-  Stream<GenreState> mapEventToState(
-    GenreEvent event,
-  ) async* {
-    if (event is GenreMovieEventStarted) {
-      yield* _mapMovieEventStateToState();
-    } else if (event is GenreSerieEventStarted) {
-      yield* _mapSerieEventStateToState();
-    }
-  }
-
-  Stream<GenreState> _mapMovieEventStateToState() async* {
-    yield GenreLoading();
+  Future<void> _mapMovieEventStateToState(
+      GenreMovieEventStarted event, Emitter<GenreState> emit) async {
+    emit(GenreLoading());
     try {
       final response = await _dio.get('/genre/movie/list');
       var genres = response.data['genres'] as List;
       List<Genre> genreList = genres.map((g) => Genre.fromJson(g)).toList();
 
-      yield GenreLoaded(genreList);
+      emit(GenreLoaded(genreList));
     } on DioError catch (error) {
       if (error.response != null) {
-        yield GenreError(error.response?.data['status_message']);
+        emit(GenreError(error.response?.data['status_message']));
       } else {
-        yield GenreError('Erro de conexão, verifique sua internet!!');
+        emit(GenreError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (_) {
-      yield GenreError('Erro desconhecido.');
+      emit(GenreError('Erro desconhecido.'));
     }
   }
 
-  Stream<GenreState> _mapSerieEventStateToState() async* {
-    yield GenreLoading();
+  Future<void> _mapSerieEventStateToState(
+      GenreSerieEventStarted event, Emitter<GenreState> emit) async {
+    emit(GenreLoading());
     try {
       final response = await _dio.get('/genre/tv/list');
       var genres = response.data['genres'] as List;
       List<Genre> genreList = genres.map((g) => Genre.fromJson(g)).toList();
 
-      yield GenreLoaded(genreList);
+      emit(GenreLoaded(genreList));
     } on DioError catch (error) {
       if (error.response != null) {
-        yield GenreError(error.response?.data['status_message']);
+        emit(GenreError(error.response?.data['status_message']));
       } else {
-        yield GenreError('Erro de conexão, verifique sua internet!!');
+        emit(GenreError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (_) {
-      yield GenreError('Erro desconhecido.');
+      emit(GenreError('Erro desconhecido.'));
     }
   }
 }

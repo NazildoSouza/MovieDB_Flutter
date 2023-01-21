@@ -27,7 +27,8 @@ class _SerieOnAirState extends State<SerieOnAir> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SerieBloc()..add(SerieEventOnAir(1)),
+      create: (_) =>
+          SerieBloc()..add(SerieEventOnAir(endPoint: 'on_the_air', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,7 +36,8 @@ class _SerieOnAirState extends State<SerieOnAir> {
   _loadMore(BuildContext context, SerieLoaded state) async {
     if (state.serieResponse.page == page) {
       page++;
-      BlocProvider.of<SerieBloc>(context)..add(SerieEventOnAir(page));
+      BlocProvider.of<SerieBloc>(context)
+        ..add(SerieEventOnAir(endPoint: 'on_the_air', page: page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -178,7 +180,9 @@ class _SerieOnAirState extends State<SerieOnAir> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<SerieBloc>().add(SerieEventOnAir(page));
+              context
+                  .read<SerieBloc>()
+                  .add(SerieEventOnAir(endPoint: 'on_the_air', page: page));
             },
           );
         } else {

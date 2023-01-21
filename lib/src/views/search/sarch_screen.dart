@@ -236,6 +236,7 @@ class ListSearch extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
         physics: BouncingScrollPhysics(),
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemCount: result.length,
         itemBuilder: (context, index) {
           return Column(

@@ -10,84 +10,183 @@ part 'movie_event.dart';
 part 'movie_state.dart';
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
-  MovieBloc() : super(MovieLoading());
+  MovieBloc() : super(MovieLoading()) {
+    on<MovieEventStarted>(_mapMovieEventStarted);
+    on<MovieEventGenre>(_mapGenreEventState);
+    on<MovieEventNowPlaying>(_mapMovieEventNowPlaying);
+    on<MovieEventUpcoming>(_mapMovieEventUpcoming);
+    on<MovieEventTopRated>(_mapMovieEventTopRated);
+    on<MovieEventPopular>(_mapMovieEventPopular);
+  }
 
   final Dio _dio = Dio(kDioOptions);
   MovieResponse? movieResponse;
   int genreId = 0;
 
-  @override
-  Stream<MovieState> mapEventToState(
-    MovieEvent event,
-  ) async* {
-    if (event is MovieEventStarted) {
-      yield* _mapMovieEventState('now_playing', event.page);
-    } else if (event is MovieEventGenre) {
-      yield* _mapGenreEventState(event.genreId, event.page);
-    } else if (event is MovieEventNowPlaying) {
-      yield* _mapMovieEventState('now_playing', event.page);
-    } else if (event is MovieEventUpcoming) {
-      yield* _mapMovieEventState('upcoming', event.page);
-    } else if (event is MovieEventTopRated) {
-      yield* _mapMovieEventState('top_rated', event.page);
-    } else if (event is MovieEventPopular) {
-      yield* _mapMovieEventState('popular', event.page);
-    }
-  }
-
-  Stream<MovieState> _mapMovieEventState(String endPoint, int page) async* {
+  Future<void> _mapMovieEventStarted(
+      MovieEventStarted event, Emitter<MovieState> emit) async {
     try {
-      final response = await _dio.get('/movie/$endPoint?page=$page');
+      final response =
+          await _dio.get('/movie/${event.endPoint}?page=${event.page}');
       var responseData = response.data;
       MovieResponse movieResponseTemp = MovieResponse.fromJson(responseData);
 
-      if (page == 1) {
+      if (event.page == 1) {
         movieResponse = movieResponseTemp;
-        yield MovieLoaded(movieResponse: movieResponse!);
+        emit(MovieLoaded(movieResponse: movieResponse!));
       } else {
         movieResponse!.results!.addAll(movieResponseTemp.results!);
-        movieResponse!.page = page;
-        yield MovieLoaded(movieResponse: movieResponse!);
+        movieResponse!.page = event.page;
+        emit(MovieLoaded(movieResponse: movieResponse!));
       }
     } on DioError catch (error) {
       if (error.response != null) {
-        yield MovieError(error.response?.data['status_message']);
+        emit(MovieError(error.response?.data['status_message']));
       } else {
-        yield MovieError('Erro de conexão, verifique sua internet!!');
+        emit(MovieError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (_) {
-      yield MovieError('Erro desconhecido.');
+      emit(MovieError('Erro desconhecido.'));
     }
   }
 
-  Stream<MovieState> _mapGenreEventState(int genreId, int page) async* {
-    if (this.genreId != genreId) {
-      yield MovieLoading();
+  Future<void> _mapMovieEventNowPlaying(
+      MovieEventNowPlaying event, Emitter<MovieState> emit) async {
+    try {
+      final response =
+          await _dio.get('/movie/${event.endPoint}?page=${event.page}');
+      var responseData = response.data;
+      MovieResponse movieResponseTemp = MovieResponse.fromJson(responseData);
+
+      if (event.page == 1) {
+        movieResponse = movieResponseTemp;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      } else {
+        movieResponse!.results!.addAll(movieResponseTemp.results!);
+        movieResponse!.page = event.page;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      }
+    } on DioError catch (error) {
+      if (error.response != null) {
+        emit(MovieError(error.response?.data['status_message']));
+      } else {
+        emit(MovieError('Erro de conexão, verifique sua internet!!'));
+      }
+    } on Exception catch (_) {
+      emit(MovieError('Erro desconhecido.'));
+    }
+  }
+
+  Future<void> _mapMovieEventUpcoming(
+      MovieEventUpcoming event, Emitter<MovieState> emit) async {
+    try {
+      final response =
+          await _dio.get('/movie/${event.endPoint}?page=${event.page}');
+      var responseData = response.data;
+      MovieResponse movieResponseTemp = MovieResponse.fromJson(responseData);
+
+      if (event.page == 1) {
+        movieResponse = movieResponseTemp;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      } else {
+        movieResponse!.results!.addAll(movieResponseTemp.results!);
+        movieResponse!.page = event.page;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      }
+    } on DioError catch (error) {
+      if (error.response != null) {
+        emit(MovieError(error.response?.data['status_message']));
+      } else {
+        emit(MovieError('Erro de conexão, verifique sua internet!!'));
+      }
+    } on Exception catch (_) {
+      emit(MovieError('Erro desconhecido.'));
+    }
+  }
+
+  Future<void> _mapMovieEventTopRated(
+      MovieEventTopRated event, Emitter<MovieState> emit) async {
+    try {
+      final response =
+          await _dio.get('/movie/${event.endPoint}?page=${event.page}');
+      var responseData = response.data;
+      MovieResponse movieResponseTemp = MovieResponse.fromJson(responseData);
+
+      if (event.page == 1) {
+        movieResponse = movieResponseTemp;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      } else {
+        movieResponse!.results!.addAll(movieResponseTemp.results!);
+        movieResponse!.page = event.page;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      }
+    } on DioError catch (error) {
+      if (error.response != null) {
+        emit(MovieError(error.response?.data['status_message']));
+      } else {
+        emit(MovieError('Erro de conexão, verifique sua internet!!'));
+      }
+    } on Exception catch (_) {
+      emit(MovieError('Erro desconhecido.'));
+    }
+  }
+
+  Future<void> _mapMovieEventPopular(
+      MovieEventPopular event, Emitter<MovieState> emit) async {
+    try {
+      final response =
+          await _dio.get('/movie/${event.endPoint}?page=${event.page}');
+      var responseData = response.data;
+      MovieResponse movieResponseTemp = MovieResponse.fromJson(responseData);
+
+      if (event.page == 1) {
+        movieResponse = movieResponseTemp;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      } else {
+        movieResponse!.results!.addAll(movieResponseTemp.results!);
+        movieResponse!.page = event.page;
+        emit(MovieLoaded(movieResponse: movieResponse!));
+      }
+    } on DioError catch (error) {
+      if (error.response != null) {
+        emit(MovieError(error.response?.data['status_message']));
+      } else {
+        emit(MovieError('Erro de conexão, verifique sua internet!!'));
+      }
+    } on Exception catch (_) {
+      emit(MovieError('Erro desconhecido.'));
+    }
+  }
+
+  Future<void> _mapGenreEventState(
+      MovieEventGenre event, Emitter<MovieState> emit) async {
+    if (this.genreId != event.genreId) {
+      emit(MovieLoading());
       movieResponse = null;
     }
 
     try {
-      final response =
-          await _dio.get('/discover/movie?with_genres=$genreId&page=$page');
+      final response = await _dio.get(
+          '/discover/movie?with_genres=${event.genreId}&page=${event.page}');
       var responseData = response.data;
       MovieResponse movieResponseTemp = MovieResponse.fromJson(responseData);
-      if (movieResponse == null && page == 1) {
-        this.genreId = genreId;
+      if (movieResponse == null && event.page == 1) {
+        this.genreId = event.genreId;
         movieResponse = movieResponseTemp;
-        yield MovieLoaded(movieResponse: movieResponse!);
+        emit(MovieLoaded(movieResponse: movieResponse!));
       } else {
         movieResponse!.results!.addAll(movieResponseTemp.results!);
-        movieResponse!.page = page;
-        yield MovieLoaded(movieResponse: movieResponse!);
+        movieResponse!.page = event.page;
+        emit(MovieLoaded(movieResponse: movieResponse!));
       }
     } on DioError catch (error) {
       if (error.response != null) {
-        yield MovieError(error.response?.data['status_message']);
+        emit(MovieError(error.response?.data['status_message']));
       } else {
-        yield MovieError('Erro de conexão, verifique sua internet!!');
+        emit(MovieError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (_) {
-      yield MovieError('Erro desconhecido.');
+      emit(MovieError('Erro desconhecido.'));
     }
   }
 }

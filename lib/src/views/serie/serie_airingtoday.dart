@@ -27,7 +27,8 @@ class _SerieAiringTodayState extends State<SerieAiringToday> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SerieBloc()..add(SerieEventAiringToday(1)),
+      create: (_) => SerieBloc()
+        ..add(SerieEventAiringToday(endPoint: 'airing_today', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,7 +36,8 @@ class _SerieAiringTodayState extends State<SerieAiringToday> {
   _loadMore(BuildContext context, SerieLoaded state) async {
     if (state.serieResponse.page == page) {
       page++;
-      BlocProvider.of<SerieBloc>(context)..add(SerieEventAiringToday(page));
+      BlocProvider.of<SerieBloc>(context)
+        ..add(SerieEventAiringToday(endPoint: 'airing_today', page: page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -178,7 +180,8 @@ class _SerieAiringTodayState extends State<SerieAiringToday> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<SerieBloc>().add(SerieEventAiringToday(page));
+              context.read<SerieBloc>().add(
+                  SerieEventAiringToday(endPoint: 'airing_today', page: page));
             },
           );
         } else {

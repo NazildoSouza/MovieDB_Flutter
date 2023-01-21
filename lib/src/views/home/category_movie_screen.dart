@@ -127,7 +127,7 @@ class _MovieCategoriesState extends State<MovieCategories> {
                                       Radius.circular(25),
                                     ),
                                     color: (genre.id == selectedGenre)
-                                        ? Theme.of(context).buttonColor
+                                        ? Colors.blue
                                         : Theme.of(context).cardColor,
                                   ),
                                   child: Text(

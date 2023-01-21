@@ -14,7 +14,8 @@ class HomeScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<MovieBloc>(
-          create: (_) => MovieBloc()..add(MovieEventStarted(1)),
+          create: (_) => MovieBloc()
+            ..add(MovieEventStarted(endPoint: "now_playing", page: 1)),
         ),
         BlocProvider<PersonBloc>(
           create: (_) => PersonBloc()..add(PersonEventStated()),

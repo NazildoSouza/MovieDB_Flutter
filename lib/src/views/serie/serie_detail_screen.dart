@@ -29,11 +29,8 @@ class SerieDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => SerieDetailBloc()..add(SerieDetailEventStated(serieId)),
-      child: WillPopScope(
-        child: Scaffold(
-          body: _buildDetailBody(context),
-        ),
-        onWillPop: () async => true,
+      child: Scaffold(
+        body: _buildDetailBody(context),
       ),
     );
   }
@@ -881,9 +878,8 @@ class SerieDetailScreen extends StatelessWidget {
                               children: serieDetail.videos!.results!.map((e) {
                                 return TextButton(
                                   onPressed: () async {
-                                    if (await canLaunch(e.youtubeURL!)) {
-                                      await launch(e.youtubeURL!);
-                                    }
+                                    final uri = Uri.parse(e.youtubeURL!);
+                                    await launchUrl(uri);
                                   },
                                   child: ListTile(
                                     leading: Icon(

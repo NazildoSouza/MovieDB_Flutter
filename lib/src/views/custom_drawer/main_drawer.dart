@@ -1,6 +1,5 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/drawerbloc/drawer_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/searchbloc/search_bloc.dart';
@@ -28,7 +27,7 @@ class MainContainerWidget extends StatefulWidget {
 class _MainContainerWidgetState extends State<MainContainerWidget> {
   _MainContainerWidgetState() {
     isPlatformDark =
-        WidgetsBinding.instance?.window.platformBrightness == Brightness.dark;
+        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
     initTheme = isPlatformDark ? _darkTheme : _lightTheme;
   }
   late DrawerBloc _bloc;
@@ -38,13 +37,25 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
   late final ThemeData initTheme;
 
   ThemeData _lightTheme = ThemeData(
+    appBarTheme: AppBarTheme().copyWith(
+      titleTextStyle: TextStyle().copyWith(
+        fontSize: 20,
+        color: Colors.black,
+      ),
+      color: Colors.white,
+      iconTheme: IconThemeData().copyWith(
+        color: Colors.black,
+      ),
+    ),
     brightness: Brightness.light,
-    buttonColor: Colors.blue,
     primaryColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
   );
 
   ThemeData _darkTheme = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: Colors.grey[850],
+    ),
     brightness: Brightness.dark,
     primaryColor: Colors.grey[850],
   );
@@ -95,21 +106,19 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
                         ThemeSwitcher(
                           clipper: ThemeSwitcherCircleClipper(),
                           builder: (context) {
-                            var brightness =
-                                ThemeProvider.of(context)?.brightness;
+                            var brightness = Theme.of(context).brightness;
                             return IconButton(
                               icon: Icon(brightness == Brightness.light
                                   ? Icons.dark_mode
                                   : Icons.light_mode),
                               onPressed: () {
-                                ThemeSwitcher.of(context)?.changeTheme(
+                                ThemeSwitcher.of(context).changeTheme(
                                   theme: brightness == Brightness.light
                                       ? _darkTheme
                                       : _lightTheme,
-                                  reverseAnimation:
-                                      brightness == Brightness.dark
-                                          ? true
-                                          : false,
+                                  isReversed: brightness == Brightness.dark
+                                      ? true
+                                      : false,
                                 );
                               },
                             );

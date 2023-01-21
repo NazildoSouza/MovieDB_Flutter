@@ -27,7 +27,8 @@ class _UpcomingState extends State<Upcoming> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => MovieBloc()..add(MovieEventUpcoming(1)),
+      create: (_) =>
+          MovieBloc()..add(MovieEventUpcoming(endPoint: 'upcoming', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,7 +36,8 @@ class _UpcomingState extends State<Upcoming> {
   _loadMore(BuildContext context, MovieLoaded state) async {
     if (state.movieResponse.page == page) {
       page++;
-      BlocProvider.of<MovieBloc>(context)..add(MovieEventUpcoming(page));
+      BlocProvider.of<MovieBloc>(context)
+        ..add(MovieEventUpcoming(endPoint: 'upcoming', page: page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -178,7 +180,9 @@ class _UpcomingState extends State<Upcoming> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<MovieBloc>().add(MovieEventUpcoming(page));
+              context
+                  .read<MovieBloc>()
+                  .add(MovieEventUpcoming(endPoint: 'upcoming', page: page));
             },
           );
         } else {

@@ -11,41 +11,33 @@ part 'episodeimages_event.dart';
 part 'episodeimages_state.dart';
 
 class EpisodeimagesBloc extends Bloc<EpisodeimagesEvent, EpisodeimagesState> {
-  EpisodeimagesBloc() : super(EpisodeImagesLoading());
+  EpisodeimagesBloc() : super(EpisodeImagesLoading()) {
+    on<EpisodeImagesEventStated>(_mapEpisodeImagesEventStartedToState);
+  }
 
   final Dio _dio = Dio(kDioOptions);
 
-  @override
-  Stream<EpisodeimagesState> mapEventToState(
-    EpisodeimagesEvent event,
-  ) async* {
-    if (event is EpisodeImagesEventStated) {
-      yield* _mapEpisodeImagesEventStartedToState(
-          event.serieId, event.seasonNumber, event.episode);
-    }
-  }
-
-  Stream<EpisodeimagesState> _mapEpisodeImagesEventStartedToState(
-      int serieId, int seasonNumber, Episode episode) async* {
-    yield EpisodeImagesLoading();
+  Future<void> _mapEpisodeImagesEventStartedToState(
+      EpisodeImagesEventStated event, Emitter<EpisodeimagesState> emit) async {
+    emit(EpisodeImagesLoading());
     try {
       final response = await _dio.get(
-          '/tv/$serieId/season/$seasonNumber/episode/${episode.episodeNumber ?? 1}/images');
+          '/tv/${event.serieId}/season/${event.seasonNumber}/episode/${event.episode.episodeNumber ?? 1}/images');
       List<Screenshot> images = List<Screenshot>.from(
           response.data["stills"].map((x) => Screenshot.fromJson(x)));
 
-      episode.images = List<Screenshot>.from(images);
+      event.episode.images = List<Screenshot>.from(images);
 
-      yield EpisodeImagesLoaded(
-          (episode.images != null && episode.images!.length > 0));
+      emit(EpisodeImagesLoaded(
+          (event.episode.images != null && event.episode.images!.length > 0)));
     } on DioError catch (error) {
       if (error.response != null) {
-        yield EpisodeImagesError(error.response?.data['status_message']);
+        emit(EpisodeImagesError(error.response?.data['status_message']));
       } else {
-        yield EpisodeImagesError('Erro de conexão, verifique sua internet!!');
+        emit(EpisodeImagesError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (_) {
-      yield EpisodeImagesError('Erro desconhecido.');
+      emit(EpisodeImagesError('Erro desconhecido.'));
     }
   }
 }

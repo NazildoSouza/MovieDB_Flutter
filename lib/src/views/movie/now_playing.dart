@@ -27,7 +27,8 @@ class _NowPlayingState extends State<NowPlaying> {
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: false,
-      create: (_) => MovieBloc()..add(MovieEventNowPlaying(1)),
+      create: (_) => MovieBloc()
+        ..add(MovieEventNowPlaying(endPoint: 'now_playing', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -36,7 +37,8 @@ class _NowPlayingState extends State<NowPlaying> {
     if (state.movieResponse.page == page) {
       page++;
 
-      BlocProvider.of<MovieBloc>(context)..add(MovieEventNowPlaying(page));
+      BlocProvider.of<MovieBloc>(context)
+        ..add(MovieEventNowPlaying(endPoint: 'now_playing', page: page));
       await Future.delayed(delay);
       setState(() {});
     }
@@ -178,7 +180,8 @@ class _NowPlayingState extends State<NowPlaying> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<MovieBloc>().add(MovieEventNowPlaying(page));
+              context.read<MovieBloc>().add(
+                  MovieEventNowPlaying(endPoint: 'now_playing', page: page));
             },
           );
         } else {

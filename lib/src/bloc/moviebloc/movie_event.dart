@@ -9,11 +9,12 @@ abstract class MovieEvent extends Equatable {
 
 class MovieEventStarted extends MovieEvent {
   final int page;
+  final String endPoint;
 
-  const MovieEventStarted(this.page);
+  const MovieEventStarted({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }
 
 class MovieEventGenre extends MovieEvent {
@@ -28,36 +29,40 @@ class MovieEventGenre extends MovieEvent {
 
 class MovieEventNowPlaying extends MovieEvent {
   final int page;
+  final String endPoint;
 
-  const MovieEventNowPlaying(this.page);
+  const MovieEventNowPlaying({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }
 
 class MovieEventUpcoming extends MovieEvent {
   final int page;
+  final String endPoint;
 
-  const MovieEventUpcoming(this.page);
+  const MovieEventUpcoming({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }
 
 class MovieEventTopRated extends MovieEvent {
   final int page;
+  final String endPoint;
 
-  const MovieEventTopRated(this.page);
+  const MovieEventTopRated({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }
 
 class MovieEventPopular extends MovieEvent {
   final int page;
+  final String endPoint;
 
-  const MovieEventPopular(this.page);
+  const MovieEventPopular({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }

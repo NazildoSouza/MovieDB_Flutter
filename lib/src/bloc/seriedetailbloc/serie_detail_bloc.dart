@@ -12,62 +12,56 @@ part 'serie_detail_event.dart';
 part 'serie_detail_state.dart';
 
 class SerieDetailBloc extends Bloc<SerieDetailEvent, SerieDetailState> {
-  SerieDetailBloc() : super(SerieDetailLoading());
+  SerieDetailBloc() : super(SerieDetailLoading()) {
+    on<SerieDetailEventStated>(_mapMovieEventStartedToState);
+    on<SeasonDetailEventStated>(_mapSeasonEventStartedToState);
+  }
 
   final Dio _dio = Dio(kDioOptionsMovieDetail);
   final Dio _dioImages = Dio(kDioOptionsMovieImages);
 
-  @override
-  Stream<SerieDetailState> mapEventToState(
-    SerieDetailEvent event,
-  ) async* {
-    if (event is SerieDetailEventStated) {
-      yield* _mapMovieEventStartedToState(event.id);
-    } else if (event is SeasonDetailEventStated) {
-      yield* _mapSeasonEventStartedToState(event.serieId, event.seasonNumber);
-    }
-  }
-
-  Stream<SerieDetailState> _mapMovieEventStartedToState(int id) async* {
-    yield SerieDetailLoading();
+  Future<void> _mapMovieEventStartedToState(
+      SerieDetailEventStated event, Emitter<SerieDetailState> emit) async {
+    emit(SerieDetailLoading());
     try {
-      final response = await _dio.get('/tv/$id');
+      final response = await _dio.get('/tv/${event.id}');
       SerieDetail serieDetail = SerieDetail.fromJson(response.data);
 
-      final imagesResponse = await _dioImages.get('/tv/$id/images');
+      final imagesResponse = await _dioImages.get('/tv/${event.id}/images');
       ImagesResponse imageResponse =
           ImagesResponse.fromJson(imagesResponse.data);
 
       serieDetail.serieImage = imageResponse;
 
-      yield SerieDetailLoaded(serieDetail);
+      emit(SerieDetailLoaded(serieDetail));
     } on DioError catch (error) {
       if (error.response != null) {
-        yield SerieDetailError(error.response?.data['status_message']);
+        emit(SerieDetailError(error.response?.data['status_message']));
       } else {
-        yield SerieDetailError('Erro de conexão, verifique sua internet!!');
+        emit(SerieDetailError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (_) {
-      yield SerieDetailError('Erro desconhecido.');
+      emit(SerieDetailError('Erro desconhecido.'));
     }
   }
 
-  Stream<SerieDetailState> _mapSeasonEventStartedToState(
-      int serieId, int seasonNumber) async* {
-    yield SeasonDetailLoading();
+  Future<void> _mapSeasonEventStartedToState(
+      SeasonDetailEventStated event, Emitter<SerieDetailState> emit) async {
+    emit(SeasonDetailLoading());
     try {
-      final response = await _dio.get('/tv/$serieId/season/$seasonNumber');
+      final response =
+          await _dio.get('/tv/${event.serieId}/season/${event.seasonNumber}');
       SeasonResponse seasonResponse = SeasonResponse.fromJson(response.data);
-      yield SeasonDetailLoaded(seasonResponse);
+      emit(SeasonDetailLoaded(seasonResponse));
     } on DioError catch (error) {
       if (error.response != null) {
-        yield SeasonDetailError(error.response?.data['status_message']);
+        emit(SeasonDetailError(error.response?.data['status_message']));
       } else {
-        yield SeasonDetailError('Erro de conexão, verifique sua internet!!');
+        emit(SeasonDetailError('Erro de conexão, verifique sua internet!!'));
       }
     } on Exception catch (error) {
       print(error.toString());
-      yield SeasonDetailError('Erro desconhecido.');
+      emit(SeasonDetailError('Erro desconhecido.'));
     }
   }
 }

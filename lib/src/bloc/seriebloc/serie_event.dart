@@ -19,36 +19,40 @@ class SerieEventGenre extends SerieEvent {
 
 class SerieEventAiringToday extends SerieEvent {
   final int page;
+  final String endPoint;
 
-  const SerieEventAiringToday(this.page);
+  const SerieEventAiringToday({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }
 
 class SerieEventOnAir extends SerieEvent {
   final int page;
+  final String endPoint;
 
-  const SerieEventOnAir(this.page);
+  const SerieEventOnAir({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }
 
 class SerieEventTopRated extends SerieEvent {
   final int page;
+  final String endPoint;
 
-  const SerieEventTopRated(this.page);
+  const SerieEventTopRated({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }
 
 class SerieEventPopular extends SerieEvent {
   final int page;
+  final String endPoint;
 
-  const SerieEventPopular(this.page);
+  const SerieEventPopular({required this.endPoint, required this.page});
 
   @override
-  List<Object> get props => [page];
+  List<Object> get props => [endPoint, page];
 }

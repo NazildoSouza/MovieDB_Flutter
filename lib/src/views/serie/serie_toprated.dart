@@ -27,7 +27,8 @@ class _SerieTopRatedState extends State<SerieTopRated> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SerieBloc()..add(SerieEventTopRated(1)),
+      create: (_) =>
+          SerieBloc()..add(SerieEventTopRated(endPoint: 'top_rated', page: 1)),
       child: _widgetNowPlaying(context),
     );
   }
@@ -35,7 +36,8 @@ class _SerieTopRatedState extends State<SerieTopRated> {
   _loadMore(BuildContext context, SerieLoaded state) async {
     if (state.serieResponse.page == page) {
       page++;
-      BlocProvider.of<SerieBloc>(context)..add(SerieEventTopRated(page));
+      BlocProvider.of<SerieBloc>(context)
+        ..add(SerieEventTopRated(endPoint: 'top_rated', page: page));
 
       await Future.delayed(delay);
       setState(() {});
@@ -178,7 +180,9 @@ class _SerieTopRatedState extends State<SerieTopRated> {
           return ErrorMessage(
             message: state.message,
             onTap: () {
-              context.read<SerieBloc>().add(SerieEventTopRated(page));
+              context
+                  .read<SerieBloc>()
+                  .add(SerieEventTopRated(endPoint: 'top_rated', page: page));
             },
           );
         } else {
