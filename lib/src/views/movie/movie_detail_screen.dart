@@ -15,6 +15,9 @@ import 'package:moviedb_flutter/src/views/person/person_detail_screen.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../model/images.dart';
+import '../components/galery.dart';
+
 class MovieDetailScreen extends StatelessWidget {
   const MovieDetailScreen(
       {Key? key, required this.movieId, required this.paletteColor})
@@ -372,100 +375,100 @@ class MovieDetailScreen extends StatelessWidget {
                                     ),
                               ),
                             ),
-                            // Container(
-                            //   height: 155,
-                            //   child: ListView.separated(
-                            //     physics: BouncingScrollPhysics(),
-                            //     padding:
-                            //         const EdgeInsets.symmetric(horizontal: 15),
-                            //     separatorBuilder: (context, index) =>
-                            //         VerticalDivider(
-                            //       color: Colors.transparent,
-                            //       width: 5,
-                            //     ),
-                            //     scrollDirection: Axis.horizontal,
-                            //     itemCount:
-                            //         movieDetail.movieImage!.backdrops!.length,
-                            //     itemBuilder: (context, index) {
-                            //       Screenshot image =
-                            //           movieDetail.movieImage!.backdrops![index];
-                            //       return GestureDetector(
-                            //         onTap: () {
-                            //           Navigator.push(
-                            //             context,
-                            //             MaterialPageRoute(
-                            //               builder: (context) =>
-                            //                   GalleryPhotoViewWrapper(
-                            //                 galleryItems: movieDetail
-                            //                     .movieImage!.backdrops!,
-                            //                 backgroundDecoration:
-                            //                     const BoxDecoration(
-                            //                   color: Colors.black,
-                            //                 ),
-                            //                 initialIndex: index,
-                            //                 // scrollDirection: verticalGallery
-                            //                 //     ? Axis.vertical
-                            //                 //     : Axis.horizontal,
-                            //               ),
-                            //             ),
-                            //           );
-                            //         },
-                            //         child: Hero(
-                            //           tag: image.filePath!,
-                            //           child: Card(
-                            //             clipBehavior: Clip.antiAlias,
-                            //             elevation: 3,
-                            //             borderOnForeground: true,
-                            //             shape: RoundedRectangleBorder(
-                            //               borderRadius:
-                            //                   BorderRadius.circular(12),
-                            //             ),
-                            //             child: ClipRRect(
-                            //               //  borderRadius: BorderRadius.circular(12),
-                            //               child: CachedNetworkImage(
-                            //                 imageUrl:
-                            //                     image.imageString('original') ??
-                            //                         '',
-                            //                 placeholder: (context, url) =>
-                            //                     Platform.isAndroid
-                            //                         ? Container(
-                            //                             width: 255,
-                            //                             height: 155,
-                            //                             color: palette?.color,
-                            //                             child: Center(
-                            //                                 child:
-                            //                                     CircularProgressIndicator(
-                            //                               color: palette
-                            //                                   ?.titleTextColor,
-                            //                             )),
-                            //                           )
-                            //                         : Container(
-                            //                             width: 255,
-                            //                             height: 155,
-                            //                             color: palette?.color,
-                            //                             child:
-                            //                                 CupertinoActivityIndicator(),
-                            //                           ),
-                            //                 fit: BoxFit.cover,
-                            //                 errorWidget:
-                            //                     (context, url, error) =>
-                            //                         Container(
-                            //                   color: palette?.color,
-                            //                   width: 100,
-                            //                   height: 100,
-                            //                   child: Icon(
-                            //                     Icons.photo,
-                            //                     color: palette?.titleTextColor,
-                            //                   ),
-                            //                 ),
-                            //               ),
-                            //             ),
-                            //           ),
-                            //         ),
-                            //       );
-                            //     },
-                            //   ),
-                            // ),
+                            Container(
+                              height: 155,
+                              child: ListView.separated(
+                                physics: BouncingScrollPhysics(),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                separatorBuilder: (context, index) =>
+                                    VerticalDivider(
+                                  color: Colors.transparent,
+                                  width: 5,
+                                ),
+                                scrollDirection: Axis.horizontal,
+                                itemCount:
+                                    movieDetail.movieImage!.backdrops!.length,
+                                itemBuilder: (context, index) {
+                                  Screenshot image =
+                                      movieDetail.movieImage!.backdrops![index];
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              GalleryPhotoViewWrapper(
+                                            galleryItems: movieDetail
+                                                .movieImage!.backdrops!,
+                                            backgroundDecoration:
+                                                const BoxDecoration(
+                                              color: Colors.black,
+                                            ),
+                                            initialIndex: index,
+                                            // scrollDirection: verticalGallery
+                                            //     ? Axis.vertical
+                                            //     : Axis.horizontal,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Hero(
+                                      tag: image.filePath!,
+                                      child: Card(
+                                        clipBehavior: Clip.antiAlias,
+                                        elevation: 3,
+                                        borderOnForeground: true,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
+                                        child: ClipRRect(
+                                          //  borderRadius: BorderRadius.circular(12),
+                                          child: CachedNetworkImage(
+                                            imageUrl:
+                                                image.imageString('original') ??
+                                                    '',
+                                            placeholder: (context, url) =>
+                                                Platform.isAndroid
+                                                    ? Container(
+                                                        width: 255,
+                                                        height: 155,
+                                                        color: palette?.color,
+                                                        child: Center(
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                          color: palette
+                                                              ?.titleTextColor,
+                                                        )),
+                                                      )
+                                                    : Container(
+                                                        width: 255,
+                                                        height: 155,
+                                                        color: palette?.color,
+                                                        child:
+                                                            CupertinoActivityIndicator(),
+                                                      ),
+                                            fit: BoxFit.cover,
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    Container(
+                                              color: palette?.color,
+                                              width: 100,
+                                              height: 100,
+                                              child: Icon(
+                                                Icons.photo,
+                                                color: palette?.titleTextColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                             SizedBox(
                               height: 5,
                             ),

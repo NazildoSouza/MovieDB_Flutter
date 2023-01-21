@@ -26,6 +26,8 @@ class CustomDrawer extends StatelessWidget {
                     Expanded(
                       child: ListView(
                         physics: BouncingScrollPhysics(),
+                        keyboardDismissBehavior:
+                            ScrollViewKeyboardDismissBehavior.onDrag,
                         children: [
                           PageSection(),
                           PageSectionMovies(),
