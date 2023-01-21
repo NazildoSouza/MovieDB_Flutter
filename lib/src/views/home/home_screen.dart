@@ -26,17 +26,19 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildBody(BuildContext context) {
-    return ListView(
+    return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
-      children: [
-        CarouselSlideMovie(),
-        MovieCategories(),
-        SerieCategories(),
-        PersonList(),
-        SizedBox(
-          height: 30,
-        ),
-      ],
+      child: Column(
+        children: [
+          CarouselSlideMovie(),
+          MovieCategories(),
+          SerieCategories(),
+          PersonList(),
+          SizedBox(
+            height: 30,
+          ),
+        ],
+      ),
     );
   }
 }
