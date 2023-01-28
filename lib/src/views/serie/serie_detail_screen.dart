@@ -139,7 +139,7 @@ class SerieDetailScreen extends StatelessWidget {
                               textAlign: TextAlign.center,
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall
                                   ?.copyWith(
                                     fontFamily: 'muli',
                                   ),
@@ -154,7 +154,7 @@ class SerieDetailScreen extends StatelessWidget {
                                   serieDetail.dateString,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         fontFamily: 'muli',
                                       ),
@@ -163,7 +163,7 @@ class SerieDetailScreen extends StatelessWidget {
                                   ' - ',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         fontFamily: 'muli',
                                       ),
@@ -172,7 +172,7 @@ class SerieDetailScreen extends StatelessWidget {
                                   serieDetail.timeString,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         fontFamily: 'muli',
                                       ),
@@ -209,7 +209,7 @@ class SerieDetailScreen extends StatelessWidget {
                               'Avaliação dos Usuários',
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -226,14 +226,16 @@ class SerieDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
                             serieDetail.tagline!,
-                            style:
-                                Theme.of(context).textTheme.subtitle2?.copyWith(
-                                      color: Theme.of(context).hintColor,
-                                      fontWeight: FontWeight.w200,
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 15,
-                                      fontFamily: 'muli',
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                  fontWeight: FontWeight.w200,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 15,
+                                  fontFamily: 'muli',
+                                ),
                           ),
                         ),
                       ],
@@ -247,10 +249,12 @@ class SerieDetailScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
                               'Sinopse'.toUpperCase(),
-                              style:
-                                  Theme.of(context).textTheme.caption?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -281,7 +285,7 @@ class SerieDetailScreen extends StatelessWidget {
                                   'Episódios:'.toUpperCase(),
                                   style: Theme.of(context)
                                       .textTheme
-                                      .caption
+                                      .bodySmall
                                       ?.copyWith(
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'muli',
@@ -294,7 +298,7 @@ class SerieDetailScreen extends StatelessWidget {
                                   '${(serieDetail.numberOfEpisodes ?? 0)}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         //  fontSize: 12,
                                         fontFamily: 'muli',
@@ -309,7 +313,7 @@ class SerieDetailScreen extends StatelessWidget {
                                 ' - ',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .subtitle2
+                                    .titleSmall
                                     ?.copyWith(
                                       //  fontSize: 12,
                                       fontFamily: 'muli',
@@ -323,7 +327,7 @@ class SerieDetailScreen extends StatelessWidget {
                                   'Temporadas:'.toUpperCase(),
                                   style: Theme.of(context)
                                       .textTheme
-                                      .caption
+                                      .bodySmall
                                       ?.copyWith(
                                         fontWeight: FontWeight.bold,
                                         fontFamily: 'muli',
@@ -336,7 +340,7 @@ class SerieDetailScreen extends StatelessWidget {
                                   '${(serieDetail.numberOfSeasons ?? 0)}',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         //   fontSize: 12,
                                         fontFamily: 'muli',
@@ -380,10 +384,12 @@ class SerieDetailScreen extends StatelessWidget {
                               serieDetail.createdBy!.length > 1
                                   ? 'Criadores'
                                   : 'Criador'.toUpperCase(),
-                              style:
-                                  Theme.of(context).textTheme.caption?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -418,7 +424,7 @@ class SerieDetailScreen extends StatelessWidget {
                                 'Imagens'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -533,7 +539,7 @@ class SerieDetailScreen extends StatelessWidget {
                                 'Elenco'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -706,7 +712,7 @@ class SerieDetailScreen extends StatelessWidget {
                                 'Equipe Técnica'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -867,7 +873,7 @@ class SerieDetailScreen extends StatelessWidget {
                                 'Trailers'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -890,7 +896,7 @@ class SerieDetailScreen extends StatelessWidget {
                                       e.name ?? '',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .caption
+                                          .bodySmall
                                           ?.copyWith(
                                             fontFamily: 'muli',
                                             fontSize: 13,

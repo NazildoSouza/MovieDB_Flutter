@@ -192,7 +192,7 @@ class BiographyPerson extends StatelessWidget {
                       padding: const EdgeInsets.only(bottom: 2.0),
                       child: Text(
                         'Conhecido(a) por'.toUpperCase(),
-                        style: Theme.of(context).textTheme.caption?.copyWith(
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                         //  overflow: TextOverflow.ellipsis,
@@ -214,9 +214,10 @@ class BiographyPerson extends StatelessWidget {
                         padding: const EdgeInsets.only(bottom: 2.0),
                         child: Text(
                           'Gênero'.toUpperCase(),
-                          style: Theme.of(context).textTheme.caption?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                           //   overflow: TextOverflow.ellipsis,
                         ),
                       ),
@@ -239,7 +240,7 @@ class BiographyPerson extends StatelessWidget {
                           child: Text(
                             'Nascimento'.toUpperCase(),
                             style:
-                                Theme.of(context).textTheme.caption?.copyWith(
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                             //  overflow: TextOverflow.ellipsis,
@@ -265,7 +266,7 @@ class BiographyPerson extends StatelessWidget {
                           child: Text(
                             'Falecimento'.toUpperCase(),
                             style:
-                                Theme.of(context).textTheme.caption?.copyWith(
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                             //  overflow: TextOverflow.ellipsis,
@@ -292,7 +293,7 @@ class BiographyPerson extends StatelessWidget {
                           child: Text(
                             'Local de Nascimento'.toUpperCase(),
                             style:
-                                Theme.of(context).textTheme.caption?.copyWith(
+                                Theme.of(context).textTheme.bodySmall?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
                             // overflow: TextOverflow.ellipsis,
@@ -341,7 +342,7 @@ class BiographyPerson extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: Text(
                 'Biografia'.toUpperCase(),
-                style: Theme.of(context).textTheme.caption?.copyWith(
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                 overflow: TextOverflow.ellipsis,
@@ -366,7 +367,7 @@ class BiographyPerson extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: Text(
               'Imagens'.toUpperCase(),
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontFamily: 'muli',
                   ),
@@ -485,7 +486,7 @@ class ListPersonMovies extends StatelessWidget {
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
                     titlePage.toUpperCase(),
-                    style: Theme.of(context).textTheme.caption?.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontFamily: 'muli',
                         ),

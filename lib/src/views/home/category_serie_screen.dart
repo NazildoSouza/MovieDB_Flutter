@@ -136,7 +136,7 @@ class _SerieCategoriesState extends State<SerieCategories> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                       color: (genre.id == selectedGenre)
-                                          ? Theme.of(context).selectedRowColor
+                                          ? Theme.of(context).indicatorColor
                                           : Theme.of(context).hintColor,
                                       fontFamily: 'muli',
                                     ),

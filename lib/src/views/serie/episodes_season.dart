@@ -227,7 +227,7 @@ class EpisodeView extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: Text(
               'Artistas Convidados'.toUpperCase(),
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontFamily: 'muli',
                   ),
@@ -374,7 +374,7 @@ class EpisodeView extends StatelessWidget {
             padding: const EdgeInsets.all(15.0),
             child: Text(
               'Equipe Técnica'.toUpperCase(),
-              style: Theme.of(context).textTheme.caption?.copyWith(
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     fontFamily: 'muli',
                   ),
@@ -532,7 +532,7 @@ class EpisodeView extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           child: Text(
             'Imagens'.toUpperCase(),
-            style: Theme.of(context).textTheme.caption?.copyWith(
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
                   fontWeight: FontWeight.bold,
                   fontFamily: 'muli',
                 ),

@@ -115,7 +115,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   state.message,
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle1
+                      .titleMedium
                       ?.copyWith(color: Theme.of(context).hintColor),
                 ));
               } else if (state is SearchError) {
@@ -247,7 +247,7 @@ class ListSearch extends StatelessWidget {
                   padding: const EdgeInsets.all(15.0),
                   child: Text(
                     titlePage.toUpperCase(),
-                    style: Theme.of(context).textTheme.caption?.copyWith(
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           fontFamily: 'muli',
                         ),

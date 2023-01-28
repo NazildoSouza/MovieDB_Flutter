@@ -143,7 +143,7 @@ class MovieDetailScreen extends StatelessWidget {
                               //     color: Theme.of(context).hintColor),
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall
                                   ?.copyWith(
                                     fontFamily: 'muli',
                                   ),
@@ -158,7 +158,7 @@ class MovieDetailScreen extends StatelessWidget {
                                   movieDetail.dateString,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         fontFamily: 'muli',
                                       ),
@@ -167,7 +167,7 @@ class MovieDetailScreen extends StatelessWidget {
                                   ' - ',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         fontFamily: 'muli',
                                       ),
@@ -176,7 +176,7 @@ class MovieDetailScreen extends StatelessWidget {
                                   movieDetail.timeString,
                                   style: Theme.of(context)
                                       .textTheme
-                                      .subtitle2
+                                      .titleSmall
                                       ?.copyWith(
                                         fontFamily: 'muli',
                                       ),
@@ -213,7 +213,7 @@ class MovieDetailScreen extends StatelessWidget {
                               'Avaliação dos Usuários',
                               style: Theme.of(context)
                                   .textTheme
-                                  .subtitle2
+                                  .titleSmall
                                   ?.copyWith(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
@@ -230,14 +230,16 @@ class MovieDetailScreen extends StatelessWidget {
                           padding: const EdgeInsets.all(15.0),
                           child: Text(
                             movieDetail.tagline!,
-                            style:
-                                Theme.of(context).textTheme.subtitle2?.copyWith(
-                                      color: Theme.of(context).hintColor,
-                                      fontWeight: FontWeight.w200,
-                                      fontStyle: FontStyle.italic,
-                                      fontSize: 15,
-                                      fontFamily: 'muli',
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleSmall
+                                ?.copyWith(
+                                  color: Theme.of(context).hintColor,
+                                  fontWeight: FontWeight.w200,
+                                  fontStyle: FontStyle.italic,
+                                  fontSize: 15,
+                                  fontFamily: 'muli',
+                                ),
                           ),
                         ),
                       ],
@@ -251,10 +253,12 @@ class MovieDetailScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(15.0),
                             child: Text(
                               'Sinopse'.toUpperCase(),
-                              style:
-                                  Theme.of(context).textTheme.caption?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall
+                                  ?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
@@ -289,7 +293,7 @@ class MovieDetailScreen extends StatelessWidget {
                                       'Orçamento:'.toUpperCase(),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .caption
+                                          .bodySmall
                                           ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontFamily: 'muli',
@@ -303,7 +307,7 @@ class MovieDetailScreen extends StatelessWidget {
                                           '--',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle2
+                                          .titleSmall
                                           ?.copyWith(
                                             //  fontSize: 12,
                                             fontFamily: 'muli',
@@ -318,7 +322,7 @@ class MovieDetailScreen extends StatelessWidget {
                                     ' - ',
                                     style: Theme.of(context)
                                         .textTheme
-                                        .subtitle2
+                                        .titleSmall
                                         ?.copyWith(
                                           //   fontSize: 12,
                                           fontFamily: 'muli',
@@ -332,7 +336,7 @@ class MovieDetailScreen extends StatelessWidget {
                                       'Receita:'.toUpperCase(),
                                       style: Theme.of(context)
                                           .textTheme
-                                          .caption
+                                          .bodySmall
                                           ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                             fontFamily: 'muli',
@@ -346,7 +350,7 @@ class MovieDetailScreen extends StatelessWidget {
                                           '--',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .subtitle2
+                                          .titleSmall
                                           ?.copyWith(
                                             //   fontSize: 12,
                                             fontFamily: 'muli',
@@ -368,7 +372,7 @@ class MovieDetailScreen extends StatelessWidget {
                                 'Imagens'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -483,7 +487,7 @@ class MovieDetailScreen extends StatelessWidget {
                                 'Elenco'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -658,7 +662,7 @@ class MovieDetailScreen extends StatelessWidget {
                                 'Equipe Técnica'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -825,7 +829,7 @@ class MovieDetailScreen extends StatelessWidget {
                                 'Trailers'.toUpperCase(),
                                 style: Theme.of(context)
                                     .textTheme
-                                    .caption
+                                    .bodySmall
                                     ?.copyWith(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'muli',
@@ -848,7 +852,7 @@ class MovieDetailScreen extends StatelessWidget {
                                       e.name ?? '',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .caption
+                                          .bodySmall
                                           ?.copyWith(
                                             fontFamily: 'muli',
                                             fontSize: 13,

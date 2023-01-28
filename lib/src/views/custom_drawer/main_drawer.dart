@@ -37,6 +37,7 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
   late final ThemeData initTheme;
 
   ThemeData _lightTheme = ThemeData(
+    useMaterial3: true,
     appBarTheme: AppBarTheme().copyWith(
       titleTextStyle: TextStyle().copyWith(
         fontSize: 20,
@@ -53,6 +54,7 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
   );
 
   ThemeData _darkTheme = ThemeData(
+    useMaterial3: true,
     appBarTheme: AppBarTheme(
       color: Colors.grey[850],
     ),

@@ -115,7 +115,7 @@ class SerieSeasons extends StatelessWidget {
                       ),
                       Text(
                         '${season.airDate?.formattedDatePerson() ?? '--'} | ${season.episodeCount} episódios',
-                        style: Theme.of(context).textTheme.subtitle2?.copyWith(
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
                               fontFamily: 'muli',
                             ),
                       ),
