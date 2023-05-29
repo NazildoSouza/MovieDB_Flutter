@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -323,18 +324,19 @@ class ListSearch extends StatelessWidget {
                             search.profileString('w200') ??
                             '',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => Platform.isAndroid
-                            ? Container(
-                                color: palette?.color,
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                  color: palette?.titleTextColor,
-                                )),
-                              )
-                            : Container(
-                                color: palette?.color,
-                                child: CupertinoActivityIndicator(),
-                              ),
+                        placeholder: (context, url) =>
+                            kIsWeb || Platform.isAndroid
+                                ? Container(
+                                    color: palette?.color,
+                                    child: Center(
+                                        child: CircularProgressIndicator(
+                                      color: palette?.titleTextColor,
+                                    )),
+                                  )
+                                : Container(
+                                    color: palette?.color,
+                                    child: CupertinoActivityIndicator(),
+                                  ),
                         errorWidget: (context, url, error) => Container(
                           color: palette?.color,
                           child: Icon(

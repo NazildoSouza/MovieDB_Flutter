@@ -25,16 +25,8 @@ class MainContainerWidget extends StatefulWidget {
 }
 
 class _MainContainerWidgetState extends State<MainContainerWidget> {
-  _MainContainerWidgetState() {
-    isPlatformDark =
-        WidgetsBinding.instance.window.platformBrightness == Brightness.dark;
-    initTheme = isPlatformDark ? _darkTheme : _lightTheme;
-  }
   late DrawerBloc _bloc;
   late Widget _content;
-
-  late final bool isPlatformDark;
-  late final ThemeData initTheme;
 
   ThemeData _lightTheme = ThemeData(
     useMaterial3: true,
@@ -94,7 +86,10 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
         child: BlocBuilder<DrawerBloc, NavDrawerState>(
           builder: (BuildContext context, NavDrawerState state) =>
               ThemeProvider(
-            initTheme: initTheme,
+            initTheme: View.of(context).platformDispatcher.platformBrightness ==
+                    Brightness.dark
+                ? _darkTheme
+                : _lightTheme,
             builder: (context, myTheme) {
               return MaterialApp(
                 theme: myTheme,

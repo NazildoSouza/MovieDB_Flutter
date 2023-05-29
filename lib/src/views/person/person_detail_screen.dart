@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/personbloc/person_bloc.dart';
@@ -155,18 +156,19 @@ class BiographyPerson extends StatelessWidget {
                     child: CachedNetworkImage(
                       imageUrl: personDetail.profileString('w500') ?? '',
                       fit: BoxFit.cover,
-                      placeholder: (context, url) => Platform.isAndroid
-                          ? Container(
-                              color: palette?.color,
-                              child: Center(
-                                  child: CircularProgressIndicator(
-                                color: palette?.titleTextColor,
-                              )),
-                            )
-                          : Container(
-                              color: palette?.color,
-                              child: CupertinoActivityIndicator(),
-                            ),
+                      placeholder: (context, url) =>
+                          kIsWeb || Platform.isAndroid
+                              ? Container(
+                                  color: palette?.color,
+                                  child: Center(
+                                      child: CircularProgressIndicator(
+                                    color: palette?.titleTextColor,
+                                  )),
+                                )
+                              : Container(
+                                  color: palette?.color,
+                                  child: CupertinoActivityIndicator(),
+                                ),
                       errorWidget: (context, url, error) => Container(
                         color: palette?.color,
                         child: Icon(
@@ -373,82 +375,85 @@ class BiographyPerson extends StatelessWidget {
                   ),
             ),
           ),
-          Container(
-            height: 155,
-            child: ListView.separated(
-              physics: BouncingScrollPhysics(),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              separatorBuilder: (context, index) => VerticalDivider(
-                color: Colors.transparent,
-                width: 5,
-              ),
-              scrollDirection: Axis.horizontal,
-              itemCount: personDetail.images!.profiles!.length,
-              itemBuilder: (context, index) {
-                Screenshot image = personDetail.images!.profiles![index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => GalleryPhotoViewWrapper(
-                          galleryItems: personDetail.images!.profiles!,
-                          backgroundDecoration: const BoxDecoration(
-                            color: Colors.black,
+          SafeArea(
+            child: Container(
+              height: 155,
+              child: ListView.separated(
+                physics: BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                separatorBuilder: (context, index) => VerticalDivider(
+                  color: Colors.transparent,
+                  width: 5,
+                ),
+                scrollDirection: Axis.horizontal,
+                itemCount: personDetail.images!.profiles!.length,
+                itemBuilder: (context, index) {
+                  Screenshot image = personDetail.images!.profiles![index];
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GalleryPhotoViewWrapper(
+                            galleryItems: personDetail.images!.profiles!,
+                            backgroundDecoration: const BoxDecoration(
+                              color: Colors.black,
+                            ),
+                            initialIndex: index,
+                            // scrollDirection: verticalGallery
+                            //     ? Axis.vertical
+                            //     : Axis.horizontal,
                           ),
-                          initialIndex: index,
-                          // scrollDirection: verticalGallery
-                          //     ? Axis.vertical
-                          //     : Axis.horizontal,
                         ),
-                      ),
-                    );
-                  },
-                  child: Hero(
-                    tag: image.filePath!,
-                    child: Card(
-                      clipBehavior: Clip.antiAlias,
-                      elevation: 3,
-                      borderOnForeground: true,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: ClipRRect(
-                        //  borderRadius: BorderRadius.circular(12),
-                        child: CachedNetworkImage(
-                          imageUrl: image.imageString('original') ?? '',
-                          placeholder: (context, url) => Platform.isAndroid
-                              ? Container(
-                                  width: 95,
-                                  height: 155,
-                                  color: palette?.color,
-                                  child: Center(
-                                      child: CircularProgressIndicator(
-                                    color: palette?.titleTextColor,
-                                  )),
-                                )
-                              : Container(
-                                  width: 95,
-                                  height: 155,
-                                  color: palette?.color,
-                                  child: CupertinoActivityIndicator(),
-                                ),
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) => Container(
-                            color: palette?.color,
-                            width: 100,
-                            height: 100,
-                            child: Icon(
-                              Icons.person,
-                              color: palette?.titleTextColor,
+                      );
+                    },
+                    child: Hero(
+                      tag: image.filePath!,
+                      child: Card(
+                        clipBehavior: Clip.antiAlias,
+                        elevation: 3,
+                        borderOnForeground: true,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: ClipRRect(
+                          //  borderRadius: BorderRadius.circular(12),
+                          child: CachedNetworkImage(
+                            imageUrl: image.imageString('original') ?? '',
+                            placeholder: (context, url) =>
+                                kIsWeb || Platform.isAndroid
+                                    ? Container(
+                                        width: 95,
+                                        height: 155,
+                                        color: palette?.color,
+                                        child: Center(
+                                            child: CircularProgressIndicator(
+                                          color: palette?.titleTextColor,
+                                        )),
+                                      )
+                                    : Container(
+                                        width: 95,
+                                        height: 155,
+                                        color: palette?.color,
+                                        child: CupertinoActivityIndicator(),
+                                      ),
+                            fit: BoxFit.cover,
+                            errorWidget: (context, url, error) => Container(
+                              color: palette?.color,
+                              width: 100,
+                              height: 100,
+                              child: Icon(
+                                Icons.person,
+                                color: palette?.titleTextColor,
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
           SizedBox(
@@ -547,18 +552,19 @@ class ListPersonMovies extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl: person.posterString('w200') ?? '',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => Platform.isAndroid
-                            ? Container(
-                                color: palette?.color,
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                  color: palette?.titleTextColor,
-                                )),
-                              )
-                            : Container(
-                                color: palette?.color,
-                                child: CupertinoActivityIndicator(),
-                              ),
+                        placeholder: (context, url) =>
+                            kIsWeb || Platform.isAndroid
+                                ? Container(
+                                    color: palette?.color,
+                                    child: Center(
+                                        child: CircularProgressIndicator(
+                                      color: palette?.titleTextColor,
+                                    )),
+                                  )
+                                : Container(
+                                    color: palette?.color,
+                                    child: CupertinoActivityIndicator(),
+                                  ),
                         errorWidget: (context, url, error) => Container(
                           color: palette?.color,
                           child: Icon(

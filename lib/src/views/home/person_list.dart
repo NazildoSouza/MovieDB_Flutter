@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/personbloc/person_bloc.dart';
@@ -107,8 +108,8 @@ class PersonList extends StatelessWidget {
                                       ),
                                     );
                                   },
-                                  placeholder: (context, url) => Platform
-                                          .isAndroid
+                                  placeholder: (context, url) => kIsWeb ||
+                                          Platform.isAndroid
                                       ? Container(
                                           width: 80,
                                           height: 80,

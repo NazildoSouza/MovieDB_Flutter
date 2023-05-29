@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -118,20 +119,21 @@ class _SerieTopRatedState extends State<SerieTopRated> {
                                 ),
                               );
                             },
-                            placeholder: (context, url) => Platform.isAndroid
-                                ? Container(
-                                    width: 180,
-                                    height: 250,
-                                    color: color,
-                                    child: Center(
-                                        child: CircularProgressIndicator()),
-                                  )
-                                : Container(
-                                    width: 180,
-                                    height: 250,
-                                    color: color,
-                                    child: CupertinoActivityIndicator(),
-                                  ),
+                            placeholder: (context, url) =>
+                                kIsWeb || Platform.isAndroid
+                                    ? Container(
+                                        width: 180,
+                                        height: 250,
+                                        color: color,
+                                        child: Center(
+                                            child: CircularProgressIndicator()),
+                                      )
+                                    : Container(
+                                        width: 180,
+                                        height: 250,
+                                        color: color,
+                                        child: CupertinoActivityIndicator(),
+                                      ),
                             fit: BoxFit.cover,
                             errorWidget: (context, url, error) => Container(
                               width: 180,

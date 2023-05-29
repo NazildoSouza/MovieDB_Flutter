@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moviedb_flutter/src/extensions/extension.dart';
 import 'package:moviedb_flutter/src/model/serie_detail.dart';
@@ -73,18 +74,19 @@ class SerieSeasons extends StatelessWidget {
                       child: CachedNetworkImage(
                         imageUrl: season.posterString('w200') ?? '',
                         fit: BoxFit.cover,
-                        placeholder: (context, url) => Platform.isAndroid
-                            ? Container(
-                                color: palette?.color,
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                  color: palette?.titleTextColor,
-                                )),
-                              )
-                            : Container(
-                                color: palette?.color,
-                                child: CupertinoActivityIndicator(),
-                              ),
+                        placeholder: (context, url) =>
+                            kIsWeb || Platform.isAndroid
+                                ? Container(
+                                    color: palette?.color,
+                                    child: Center(
+                                        child: CircularProgressIndicator(
+                                      color: palette?.titleTextColor,
+                                    )),
+                                  )
+                                : Container(
+                                    color: palette?.color,
+                                    child: CupertinoActivityIndicator(),
+                                  ),
                         errorWidget: (context, url, error) => Container(
                           color: palette?.color,
                           child: Icon(

@@ -62,24 +62,42 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
               onPageChanged: onPageChanged,
               scrollDirection: widget.scrollDirection,
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.black54,
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.black54,
+                      ),
+                      padding: const EdgeInsets.all(8.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          "Voltar",
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 17.0,
+                            decoration: null,
+                          ),
+                        ),
+                      ),
                     ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
+                    Container(
+                      margin: EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.black54,
+                      ),
+                      padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        "Voltar",
+                        "Imagem ${currentIndex + 1} de ${widget.galleryItems.length}",
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 17.0,
@@ -87,24 +105,8 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.black54,
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Imagem ${currentIndex + 1} de ${widget.galleryItems.length}",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 17.0,
-                        decoration: null,
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             )
           ],

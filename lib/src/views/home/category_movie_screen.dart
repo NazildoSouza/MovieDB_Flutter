@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
@@ -253,7 +254,7 @@ class _MovieCategoriesState extends State<MovieCategories> {
                                             );
                                           },
                                           placeholder: (context, url) =>
-                                              Platform.isAndroid
+                                              kIsWeb || Platform.isAndroid
                                                   ? Container(
                                                       width: 180,
                                                       height: 250,

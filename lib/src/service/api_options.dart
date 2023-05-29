@@ -7,8 +7,8 @@ const kApiKey =
 const kServerError = 'Failed to connect to the server. Try again later.';
 final kDioOptions = BaseOptions(
   baseUrl: kBaseUrl,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
+  // connectTimeout: 5000,
+  // receiveTimeout: 3000,
   queryParameters: {
     'language': 'pt-BR',
   },
@@ -18,8 +18,8 @@ final kDioOptions = BaseOptions(
 
 final kDioOptionsMovieDetail = BaseOptions(
   baseUrl: kBaseUrl,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
+  // connectTimeout: 5000,
+  // receiveTimeout: 3000,
   queryParameters: {
     'language': 'pt-BR',
     'append_to_response': 'videos,credits,images'
@@ -30,8 +30,8 @@ final kDioOptionsMovieDetail = BaseOptions(
 
 final kDioOptionsPesonDetail = BaseOptions(
   baseUrl: kBaseUrl,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
+  // connectTimeout: 5000,
+  // receiveTimeout: 3000,
   queryParameters: {
     'language': 'pt-BR',
     'append_to_response': 'videos,movie_credits,tv_credits,images'
@@ -42,8 +42,8 @@ final kDioOptionsPesonDetail = BaseOptions(
 
 final kDioOptionsMovieImages = BaseOptions(
   baseUrl: kBaseUrl,
-  connectTimeout: 5000,
-  receiveTimeout: 3000,
+  // connectTimeout: 5000,
+  // receiveTimeout: 3000,
   queryParameters: {
     'language': 'pt-BR',
     'include_image_language': 'pt,null',
@@ -54,8 +54,8 @@ final kDioOptionsMovieImages = BaseOptions(
 
 BaseOptions kDioOptionsSearch([String query = '', int page = 1]) => BaseOptions(
       baseUrl: kBaseUrl,
-      connectTimeout: 5000,
-      receiveTimeout: 3000,
+      // connectTimeout: 5000,
+      // receiveTimeout: 3000,
       queryParameters: {
         "language": "pt-BR",
         "include_adult": "true",

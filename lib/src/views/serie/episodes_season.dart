@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:moviedb_flutter/src/bloc/episodeimagesbloc/episodeimages_bloc.dart';
@@ -299,22 +300,23 @@ class EpisodeView extends StatelessWidget {
                                   ),
                                 );
                               },
-                              placeholder: (context, url) => Platform.isAndroid
-                                  ? Container(
-                                      width: 80,
-                                      height: 80,
-                                      color: palette?.color,
-                                      child: Center(
-                                          child: CircularProgressIndicator(
-                                        color: palette?.titleTextColor,
-                                      )),
-                                    )
-                                  : Container(
-                                      width: 80,
-                                      height: 80,
-                                      color: palette?.color,
-                                      child: CupertinoActivityIndicator(),
-                                    ),
+                              placeholder: (context, url) =>
+                                  kIsWeb || Platform.isAndroid
+                                      ? Container(
+                                          width: 80,
+                                          height: 80,
+                                          color: palette?.color,
+                                          child: Center(
+                                              child: CircularProgressIndicator(
+                                            color: palette?.titleTextColor,
+                                          )),
+                                        )
+                                      : Container(
+                                          width: 80,
+                                          height: 80,
+                                          color: palette?.color,
+                                          child: CupertinoActivityIndicator(),
+                                        ),
                               errorWidget: (context, url, error) => Container(
                                 color: palette?.color,
                                 width: 80,
@@ -446,22 +448,23 @@ class EpisodeView extends StatelessWidget {
                                   ),
                                 );
                               },
-                              placeholder: (context, url) => Platform.isAndroid
-                                  ? Container(
-                                      width: 80,
-                                      height: 80,
-                                      color: palette?.color,
-                                      child: Center(
-                                          child: CircularProgressIndicator(
-                                        color: palette?.titleTextColor,
-                                      )),
-                                    )
-                                  : Container(
-                                      width: 80,
-                                      height: 80,
-                                      color: palette?.color,
-                                      child: CupertinoActivityIndicator(),
-                                    ),
+                              placeholder: (context, url) =>
+                                  kIsWeb || Platform.isAndroid
+                                      ? Container(
+                                          width: 80,
+                                          height: 80,
+                                          color: palette?.color,
+                                          child: Center(
+                                              child: CircularProgressIndicator(
+                                            color: palette?.titleTextColor,
+                                          )),
+                                        )
+                                      : Container(
+                                          width: 80,
+                                          height: 80,
+                                          color: palette?.color,
+                                          child: CupertinoActivityIndicator(),
+                                        ),
                               errorWidget: (context, url, error) => Container(
                                 color: palette?.color,
                                 width: 80,
@@ -582,22 +585,23 @@ class EpisodeView extends StatelessWidget {
                       //  borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
                         imageUrl: image.imageString('original') ?? '',
-                        placeholder: (context, url) => Platform.isAndroid
-                            ? Container(
-                                width: 255,
-                                height: 155,
-                                color: palette?.color,
-                                child: Center(
-                                    child: CircularProgressIndicator(
-                                  color: palette?.titleTextColor,
-                                )),
-                              )
-                            : Container(
-                                width: 255,
-                                height: 155,
-                                color: palette?.color,
-                                child: CupertinoActivityIndicator(),
-                              ),
+                        placeholder: (context, url) =>
+                            kIsWeb || Platform.isAndroid
+                                ? Container(
+                                    width: 255,
+                                    height: 155,
+                                    color: palette?.color,
+                                    child: Center(
+                                        child: CircularProgressIndicator(
+                                      color: palette?.titleTextColor,
+                                    )),
+                                  )
+                                : Container(
+                                    width: 255,
+                                    height: 155,
+                                    color: palette?.color,
+                                    child: CupertinoActivityIndicator(),
+                                  ),
                         fit: BoxFit.cover,
                         errorWidget: (context, url, error) => Container(
                           color: palette?.color,
