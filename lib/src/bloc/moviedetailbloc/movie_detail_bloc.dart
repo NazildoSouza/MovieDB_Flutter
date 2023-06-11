@@ -32,7 +32,7 @@ class MovieDetailBloc extends Bloc<MovieDetailEvent, MovieDetailState> {
       movieDetail.movieImage = imageResponse;
 
       emit(MovieDetailLoaded(movieDetail));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(MovieDetailError(error.response?.data['status_message']));
       } else {

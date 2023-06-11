@@ -34,7 +34,7 @@ class SerieDetailBloc extends Bloc<SerieDetailEvent, SerieDetailState> {
       serieDetail.serieImage = imageResponse;
 
       emit(SerieDetailLoaded(serieDetail));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SerieDetailError(error.response?.data['status_message']));
       } else {
@@ -53,7 +53,7 @@ class SerieDetailBloc extends Bloc<SerieDetailEvent, SerieDetailState> {
           await _dio.get('/tv/${event.serieId}/season/${event.seasonNumber}');
       SeasonResponse seasonResponse = SeasonResponse.fromJson(response.data);
       emit(SeasonDetailLoaded(seasonResponse));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SeasonDetailError(error.response?.data['status_message']));
       } else {

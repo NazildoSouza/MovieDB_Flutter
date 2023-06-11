@@ -30,7 +30,7 @@ class EpisodeimagesBloc extends Bloc<EpisodeimagesEvent, EpisodeimagesState> {
 
       emit(EpisodeImagesLoaded(
           (event.episode.images != null && event.episode.images!.length > 0)));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(EpisodeImagesError(error.response?.data['status_message']));
       } else {

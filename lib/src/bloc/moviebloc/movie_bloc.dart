@@ -39,7 +39,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         movieResponse!.page = event.page;
         emit(MovieLoaded(movieResponse: movieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(MovieError(error.response?.data['status_message']));
       } else {
@@ -66,7 +66,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         movieResponse!.page = event.page;
         emit(MovieLoaded(movieResponse: movieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(MovieError(error.response?.data['status_message']));
       } else {
@@ -93,7 +93,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         movieResponse!.page = event.page;
         emit(MovieLoaded(movieResponse: movieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(MovieError(error.response?.data['status_message']));
       } else {
@@ -120,7 +120,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         movieResponse!.page = event.page;
         emit(MovieLoaded(movieResponse: movieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(MovieError(error.response?.data['status_message']));
       } else {
@@ -147,7 +147,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         movieResponse!.page = event.page;
         emit(MovieLoaded(movieResponse: movieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(MovieError(error.response?.data['status_message']));
       } else {
@@ -179,7 +179,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
         movieResponse!.page = event.page;
         emit(MovieLoaded(movieResponse: movieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(MovieError(error.response?.data['status_message']));
       } else {

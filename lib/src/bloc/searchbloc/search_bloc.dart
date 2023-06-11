@@ -49,7 +49,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         searchResponse = null;
         emit(SearchQueryIsEmpty('Digite uma Busca.'));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SearchError(error.response?.data['status_message']));
       } else {

@@ -26,7 +26,7 @@ class GenreBloc extends Bloc<GenreEvent, GenreState> {
       List<Genre> genreList = genres.map((g) => Genre.fromJson(g)).toList();
 
       emit(GenreLoaded(genreList));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(GenreError(error.response?.data['status_message']));
       } else {
@@ -46,7 +46,7 @@ class GenreBloc extends Bloc<GenreEvent, GenreState> {
       List<Genre> genreList = genres.map((g) => Genre.fromJson(g)).toList();
 
       emit(GenreLoaded(genreList));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(GenreError(error.response?.data['status_message']));
       } else {

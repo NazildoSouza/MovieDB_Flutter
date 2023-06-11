@@ -26,7 +26,7 @@ class PersonBloc extends Bloc<PersonEvent, PersonState> {
       var persons = response.data['results'] as List;
       List<Person> personList = persons.map((p) => Person.fromJson(p)).toList();
       emit(ListPersonLoaded(personList));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(PersonError(error.response?.data['status_message']));
       } else {
@@ -49,7 +49,7 @@ class PersonBloc extends Bloc<PersonEvent, PersonState> {
       // personDetail.credits = credits;
 
       emit(PersonDetailLoaded(personDetail));
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(PersonError(error.response?.data['status_message']));
       } else {

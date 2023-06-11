@@ -55,7 +55,7 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
         serieResponse!.page = event.page;
         emit(SerieLoaded(serieResponse: serieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SerieError(error.response?.data['status_message']));
       } else {
@@ -82,7 +82,7 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
         serieResponse!.page = event.page;
         emit(SerieLoaded(serieResponse: serieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SerieError(error.response?.data['status_message']));
       } else {
@@ -109,7 +109,7 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
         serieResponse!.page = event.page;
         emit(SerieLoaded(serieResponse: serieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SerieError(error.response?.data['status_message']));
       } else {
@@ -136,7 +136,7 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
         serieResponse!.page = event.page;
         emit(SerieLoaded(serieResponse: serieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SerieError(error.response?.data['status_message']));
       } else {
@@ -168,7 +168,7 @@ class SerieBloc extends Bloc<SerieEvent, SerieState> {
         serieResponse!.page = event.page;
         emit(SerieLoaded(serieResponse: serieResponse!));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       if (error.response != null) {
         emit(SerieError(error.response?.data['status_message']));
       } else {
