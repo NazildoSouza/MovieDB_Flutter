@@ -119,13 +119,14 @@ class EpisodeView extends StatelessWidget {
             Card(
               margin: EdgeInsets.all(0),
               elevation: 5,
-              child: ClipRRect(
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
                 child: CachedNetworkImage(
-                  imageUrl: episode.stillString('w500') ?? '',
-                  height: MediaQuery.of(context).size.height / 4,
+                  imageUrl: episode.stillString('original') ?? '',
+                  height: MediaQuery.sizeOf(context).height / 4,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                  placeholder: (context, url) => Platform.isAndroid
+                  placeholder: (context, url) => kIsWeb || Platform.isAndroid
                       ? Container(
                           color: palette?.color,
                           child: Center(
@@ -247,14 +248,14 @@ class EpisodeView extends StatelessWidget {
               itemCount: episode.guestStars!.length,
               itemBuilder: (context, index) {
                 Cast cast = episode.guestStars![index];
-                return GestureDetector(
+                return InkWell(
                   onTap: () async {
                     late PaletteGenerator paletteGenerator;
-                    if (cast.profileString('w200') != null) {
+                    if (cast.profileString('w500') != null) {
                       paletteGenerator =
                           await PaletteGenerator.fromImageProvider(
                               CachedNetworkImageProvider(
-                                  cast.profileString('w200')!));
+                                  cast.profileString('w500')!));
                     } else {
                       paletteGenerator =
                           await PaletteGenerator.fromImageProvider(
@@ -285,7 +286,7 @@ class EpisodeView extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
                             child: CachedNetworkImage(
-                              imageUrl: cast.profileString('w200') ?? '',
+                              imageUrl: cast.profileString('w500') ?? '',
                               imageBuilder: (context, imageBuilder) {
                                 return Container(
                                   width: 80,
@@ -395,14 +396,14 @@ class EpisodeView extends StatelessWidget {
               itemCount: episode.crew!.length,
               itemBuilder: (context, index) {
                 Cast cast = episode.crew![index];
-                return GestureDetector(
+                return InkWell(
                   onTap: () async {
                     late PaletteGenerator paletteGenerator;
-                    if (cast.profileString('w200') != null) {
+                    if (cast.profileString('w500') != null) {
                       paletteGenerator =
                           await PaletteGenerator.fromImageProvider(
                               CachedNetworkImageProvider(
-                                  cast.profileString('w200')!));
+                                  cast.profileString('w500')!));
                     } else {
                       paletteGenerator =
                           await PaletteGenerator.fromImageProvider(
@@ -433,7 +434,7 @@ class EpisodeView extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(100),
                             child: CachedNetworkImage(
-                              imageUrl: cast.profileString('w200') ?? '',
+                              imageUrl: cast.profileString('w500') ?? '',
                               imageBuilder: (context, imageBuilder) {
                                 return Container(
                                   width: 80,
@@ -554,7 +555,7 @@ class EpisodeView extends StatelessWidget {
             itemCount: episode.images!.length,
             itemBuilder: (context, index) {
               Screenshot image = episode.images![index];
-              return GestureDetector(
+              return InkWell(
                 onTap: () {
                   Navigator.push(
                     context,
@@ -574,42 +575,45 @@ class EpisodeView extends StatelessWidget {
                 },
                 child: Hero(
                   tag: image.filePath!,
-                  child: Card(
-                    clipBehavior: Clip.antiAlias,
-                    elevation: 3,
-                    borderOnForeground: true,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ClipRRect(
-                      //  borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: image.imageString('original') ?? '',
-                        placeholder: (context, url) =>
-                            kIsWeb || Platform.isAndroid
-                                ? Container(
-                                    width: 255,
-                                    height: 155,
-                                    color: palette?.color,
-                                    child: Center(
-                                        child: CircularProgressIndicator(
-                                      color: palette?.titleTextColor,
-                                    )),
-                                  )
-                                : Container(
-                                    width: 255,
-                                    height: 155,
-                                    color: palette?.color,
-                                    child: CupertinoActivityIndicator(),
-                                  ),
-                        fit: BoxFit.cover,
-                        errorWidget: (context, url, error) => Container(
-                          color: palette?.color,
-                          width: 100,
-                          height: 100,
-                          child: Icon(
-                            Icons.photo,
-                            color: palette?.titleTextColor,
+                  child: AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Card(
+                      clipBehavior: Clip.antiAlias,
+                      elevation: 3,
+                      borderOnForeground: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ClipRRect(
+                        //  borderRadius: BorderRadius.circular(12),
+                        child: CachedNetworkImage(
+                          imageUrl: image.imageString('original') ?? '',
+                          placeholder: (context, url) =>
+                              kIsWeb || Platform.isAndroid
+                                  ? Container(
+                                      width: 255,
+                                      height: 155,
+                                      color: palette?.color,
+                                      child: Center(
+                                          child: CircularProgressIndicator(
+                                        color: palette?.titleTextColor,
+                                      )),
+                                    )
+                                  : Container(
+                                      width: 255,
+                                      height: 155,
+                                      color: palette?.color,
+                                      child: CupertinoActivityIndicator(),
+                                    ),
+                          fit: BoxFit.cover,
+                          errorWidget: (context, url, error) => Container(
+                            color: palette?.color,
+                            width: 100,
+                            height: 100,
+                            child: Icon(
+                              Icons.photo,
+                              color: palette?.titleTextColor,
+                            ),
                           ),
                         ),
                       ),

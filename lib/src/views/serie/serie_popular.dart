@@ -69,14 +69,14 @@ class _SeriePopularState extends State<SeriePopular> {
                   itemBuilder: (context, index) {
                     Serie serie =
                         state.serieResponse.results?[index] ?? Serie();
-                    return GestureDetector(
+                    return InkWell(
                       onTap: () async {
                         late PaletteGenerator paletteGenerator;
-                        if (serie.posterString('w200') != null) {
+                        if (serie.posterString('w500') != null) {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
                                   CachedNetworkImageProvider(
-                                      serie.posterString('w200')!));
+                                      serie.posterString('w500')!));
                         } else {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
@@ -103,7 +103,7 @@ class _SeriePopularState extends State<SeriePopular> {
                           borderRadius: BorderRadius.circular(12),
                           clipBehavior: Clip.antiAlias,
                           child: CachedNetworkImage(
-                            imageUrl: serie.posterString('w200') ?? '',
+                            imageUrl: serie.posterString('w500') ?? '',
                             imageBuilder: (context, imageProvider) {
                               return Container(
                                 width: 180,

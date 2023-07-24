@@ -55,14 +55,14 @@ class PersonList extends StatelessWidget {
                   itemBuilder: (context, index) {
                     Person person = personList[index];
                     Color color = Colors.grey.shade200;
-                    return GestureDetector(
+                    return InkWell(
                       onTap: () async {
                         late PaletteGenerator paletteGenerator;
-                        if (person.profileString('w200') != null) {
+                        if (person.profileString('w500') != null) {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
                                   CachedNetworkImageProvider(
-                                      person.profileString('w200')!));
+                                      person.profileString('w500')!));
                         } else {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
@@ -92,7 +92,7 @@ class PersonList extends StatelessWidget {
                               elevation: 3,
                               child: ClipRRect(
                                 child: CachedNetworkImage(
-                                  imageUrl: person.profileString('w200') ?? '',
+                                  imageUrl: person.profileString('w500') ?? '',
                                   imageBuilder: (context, imageProvider) {
                                     return Container(
                                       width: 80,

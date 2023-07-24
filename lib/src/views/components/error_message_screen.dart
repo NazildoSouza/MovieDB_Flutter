@@ -34,14 +34,14 @@ class ErrorMessage extends StatelessWidget {
             SizedBox(height: space),
             _buidlText(),
             SizedBox(height: space),
-            if (onTap != null) _buildButton(),
+            if (onTap != null) _buildButton(context),
           ],
         ),
       ),
     );
   }
 
-  _buildIcon() {
+  Icon _buildIcon() {
     return Icon(
       icon,
       color: color,
@@ -49,7 +49,7 @@ class ErrorMessage extends StatelessWidget {
     );
   }
 
-  _buidlText() {
+  SingleChildScrollView _buidlText() {
     return SingleChildScrollView(
       child: Text(
         message,
@@ -59,13 +59,13 @@ class ErrorMessage extends StatelessWidget {
     );
   }
 
-  _buildButton() {
+  IconButton _buildButton(BuildContext context) {
     return IconButton(
         onPressed: onTap,
         icon: Icon(
           Icons.refresh,
           size: 30,
-          color: Colors.blue,
+          color: Theme.of(context).colorScheme.surfaceTint,
         ));
   }
 }

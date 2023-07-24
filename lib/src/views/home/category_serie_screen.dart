@@ -107,7 +107,11 @@ class _SerieCategoriesState extends State<SerieCategories> {
                           Genre genre = genres[index];
                           return Column(
                             children: <Widget>[
-                              GestureDetector(
+                              InkWell(
+                                focusColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                                 onTap: () {
                                   if (selectedGenre != (genre.id ?? 0)) {
                                     setState(() {
@@ -128,7 +132,9 @@ class _SerieCategoriesState extends State<SerieCategories> {
                                       Radius.circular(25),
                                     ),
                                     color: (genre.id == selectedGenre)
-                                        ? Colors.blue
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .surfaceTint
                                         : Theme.of(context).cardColor,
                                   ),
                                   child: Text(
@@ -137,7 +143,7 @@ class _SerieCategoriesState extends State<SerieCategories> {
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
                                       color: (genre.id == selectedGenre)
-                                          ? Theme.of(context).indicatorColor
+                                          ? Colors.white
                                           : Theme.of(context).hintColor,
                                       fontFamily: 'muli',
                                     ),
@@ -193,128 +199,7 @@ class _SerieCategoriesState extends State<SerieCategories> {
                     itemBuilder: (context, index) {
                       Serie serie = serieList[index];
                       Color color = Colors.grey.shade200;
-                      return Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              GestureDetector(
-                                onTap: () async {
-                                  late PaletteGenerator paletteGenerator;
-                                  if (serie.posterString('w200') != null) {
-                                    paletteGenerator = await PaletteGenerator
-                                        .fromImageProvider(
-                                            CachedNetworkImageProvider(
-                                                serie.posterString('w200')!));
-                                  } else {
-                                    paletteGenerator = await PaletteGenerator
-                                        .fromImageProvider(AssetImage(
-                                            'assets/images/img_not_found.jpg'));
-                                  }
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SerieDetailScreen(
-                                          serieId: serie.id ?? 0,
-                                          paletteColor: paletteGenerator),
-                                    ),
-                                  );
-                                },
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  alignment: AlignmentDirectional.bottomEnd,
-                                  children: [
-                                    Card(
-                                      margin: EdgeInsets.all(0),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      elevation: 5,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        clipBehavior: Clip.antiAlias,
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              serie.posterString('w200') ?? '',
-                                          imageBuilder:
-                                              (context, imageProvider) {
-                                            return Container(
-                                              width: 180,
-                                              height: 250,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(12),
-                                                ),
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.fill,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          placeholder: (context, url) =>
-                                              kIsWeb || Platform.isAndroid
-                                                  ? Container(
-                                                      width: 180,
-                                                      height: 250,
-                                                      color: color,
-                                                      child: Center(
-                                                          child:
-                                                              CircularProgressIndicator()),
-                                                    )
-                                                  : Container(
-                                                      width: 180,
-                                                      height: 250,
-                                                      color: color,
-                                                      child:
-                                                          CupertinoActivityIndicator(),
-                                                    ),
-                                          fit: BoxFit.cover,
-                                          errorWidget: (context, url, error) =>
-                                              Container(
-                                            width: 180,
-                                            height: 250,
-                                            color: color,
-                                            child: Icon(
-                                              Icons.photo,
-                                              color: Colors.black45,
-                                              size: 150,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: -18,
-                                      width: 60,
-                                      height: 60,
-                                      child: RadialChart(
-                                          voteAverage: serie.voteAverage ?? 0),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Container(
-                                width: 180,
-                                child: Text(
-                                  (serie.name ?? '').toUpperCase(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    //   color: Colors.black45,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'muli',
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      );
+                      return CardSerie(serie: serie, color: color);
                     },
                   ),
                 ),
@@ -334,6 +219,150 @@ class _SerieCategoriesState extends State<SerieCategories> {
           },
         ),
       ],
+    );
+  }
+}
+
+class CardSerie extends StatefulWidget {
+  const CardSerie({
+    super.key,
+    required this.serie,
+    required this.color,
+  });
+
+  final Serie serie;
+  final Color color;
+
+  @override
+  State<CardSerie> createState() => _CardSerieState();
+}
+
+class _CardSerieState extends State<CardSerie> {
+  bool isHovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      focusColor: Colors.transparent,
+      hoverColor: Colors.transparent,
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      onHover: !kIsWeb
+          ? null
+          : (value) => setState(() {
+                isHovering = value;
+              }),
+      onTap: () async {
+        late PaletteGenerator paletteGenerator;
+        if (widget.serie.posterString('w500') != null) {
+          paletteGenerator = await PaletteGenerator.fromImageProvider(
+              CachedNetworkImageProvider(widget.serie.posterString('w500')!));
+        } else {
+          paletteGenerator = await PaletteGenerator.fromImageProvider(
+              AssetImage('assets/images/img_not_found.jpg'));
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => SerieDetailScreen(
+                serieId: widget.serie.id ?? 0, paletteColor: paletteGenerator),
+          ),
+        );
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Stack(
+            clipBehavior: Clip.none,
+            alignment: AlignmentDirectional.bottomEnd,
+            children: [
+              Card(
+                margin: EdgeInsets.all(0),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 5,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  clipBehavior: Clip.antiAlias,
+                  child: CachedNetworkImage(
+                    imageUrl: widget.serie.posterString('w500') ?? '',
+                    imageBuilder: (context, imageProvider) {
+                      return AnimatedContainer(
+                        alignment: Alignment.center,
+                        duration: const Duration(milliseconds: 250),
+                        curve: Curves.easeInOut,
+                        transform: !kIsWeb ? null : Matrix4.identity()
+                          ?..scale(
+                            isHovering ? 1.05 : 1,
+                          ),
+                        width: 180,
+                        height: 250,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(12),
+                          ),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.fill,
+                          ),
+                        ),
+                      );
+                    },
+                    placeholder: (context, url) => kIsWeb || Platform.isAndroid
+                        ? Container(
+                            width: 180,
+                            height: 250,
+                            color: widget.color,
+                            child: Center(child: CircularProgressIndicator()),
+                          )
+                        : Container(
+                            width: 180,
+                            height: 250,
+                            color: widget.color,
+                            child: CupertinoActivityIndicator(),
+                          ),
+                    fit: BoxFit.cover,
+                    errorWidget: (context, url, error) => Container(
+                      width: 180,
+                      height: 250,
+                      color: widget.color,
+                      child: Icon(
+                        Icons.photo,
+                        color: Colors.black45,
+                        size: 150,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                bottom: -18,
+                width: 60,
+                height: 60,
+                child: RadialChart(voteAverage: widget.serie.voteAverage ?? 0),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Container(
+            width: 180,
+            child: Text(
+              (widget.serie.name ?? '').toUpperCase(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12,
+                //   color: Colors.black45,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'muli',
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

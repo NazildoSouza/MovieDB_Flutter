@@ -18,6 +18,8 @@ class CarouselSlideMovie extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.sizeOf(context);
+
     return BlocBuilder<MovieBloc, MovieState>(
       builder: (context, state) {
         if (state is MovieLoading) {
@@ -51,7 +53,7 @@ class CarouselSlideMovie extends StatelessWidget {
                       // Color color = Colors.accents[
                       //     Random().nextInt(Colors.accents.length)];
                       Color color = Colors.grey.shade200;
-                      return GestureDetector(
+                      return InkWell(
                         onTap: () async {
                           late PaletteGenerator paletteGenerator;
                           if (movie.posterString('w500') != null) {
@@ -86,9 +88,10 @@ class CarouselSlideMovie extends StatelessWidget {
                               elevation: 2,
                               child: ClipRRect(
                                 child: CachedNetworkImage(
-                                  imageUrl: movie.backdropString('w500') ?? '',
-                                  height: MediaQuery.of(context).size.height,
-                                  width: MediaQuery.of(context).size.width,
+                                  imageUrl:
+                                      movie.backdropString('original') ?? '',
+                                  height: MediaQuery.sizeOf(context).height,
+                                  width: MediaQuery.sizeOf(context).width,
                                   fit: BoxFit.cover,
                                   placeholder: (context, url) => kIsWeb ||
                                           Platform.isAndroid
@@ -141,12 +144,15 @@ class CarouselSlideMovie extends StatelessWidget {
                     },
                     options: CarouselOptions(
                       enableInfiniteScroll: true,
-                      autoPlay: true,
                       autoPlayInterval: Duration(seconds: 5),
                       autoPlayAnimationDuration: Duration(milliseconds: 800),
                       pauseAutoPlayOnTouch: true,
-                      viewportFraction: 0.8,
                       enlargeCenterPage: true,
+                      aspectRatio:
+                          ((size.width) / (size.height / 2)).clamp(1.7, 2.8),
+                      autoPlay: true,
+                      viewportFraction:
+                          (size.height / size.width).clamp(0.5, 0.8),
                     ),
                   ),
                 ),

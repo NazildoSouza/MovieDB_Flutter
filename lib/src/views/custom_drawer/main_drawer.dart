@@ -30,28 +30,45 @@ class _MainContainerWidgetState extends State<MainContainerWidget> {
 
   ThemeData _lightTheme = ThemeData(
     useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blue,
+      brightness: Brightness.light,
+    ),
     appBarTheme: AppBarTheme().copyWith(
       titleTextStyle: TextStyle().copyWith(
         fontSize: 20,
         color: Colors.black,
       ),
-      color: Colors.white,
       iconTheme: IconThemeData().copyWith(
         color: Colors.black,
       ),
+      backgroundColor: Colors.white,
+      foregroundColor: Colors.white,
+      surfaceTintColor: Colors.white,
     ),
-    brightness: Brightness.light,
     primaryColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
   );
 
   ThemeData _darkTheme = ThemeData(
     useMaterial3: true,
-    appBarTheme: AppBarTheme(
-      color: Colors.grey[850],
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: Colors.blueGrey,
+      brightness: Brightness.dark,
     ),
-    brightness: Brightness.dark,
-    primaryColor: Colors.grey[850],
+    appBarTheme: AppBarTheme().copyWith(
+      titleTextStyle: TextStyle().copyWith(
+        fontSize: 20,
+        color: Colors.white,
+      ),
+      iconTheme: IconThemeData().copyWith(
+        color: Colors.white,
+      ),
+      backgroundColor: Colors.grey.shade900,
+      foregroundColor: Colors.grey.shade900,
+      surfaceTintColor: Colors.grey.shade900,
+    ),
+    primaryColor: Colors.grey.shade900,
   );
 
   @override

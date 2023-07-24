@@ -37,7 +37,7 @@ class SerieDetailScreen extends StatelessWidget {
   }
 
   Widget _buildDetailBody(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.sizeOf(context);
     // Color color = Colors.accents[Random().nextInt(Colors.accents.length)];
     var palette = paletteColor.mutedColor ?? paletteColor.dominantColor;
     return BlocBuilder<SerieDetailBloc, SerieDetailState>(
@@ -108,7 +108,7 @@ class SerieDetailScreen extends StatelessWidget {
                   ],
                   background: CachedNetworkImage(
                     imageUrl: serieDetail.backdropString('original') ?? '',
-                    height: MediaQuery.of(context).size.height,
+                    height: MediaQuery.sizeOf(context).height,
                     width: double.infinity,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => kIsWeb || Platform.isAndroid
@@ -461,7 +461,7 @@ class SerieDetailScreen extends StatelessWidget {
                             itemBuilder: (context, index) {
                               Screenshot image =
                                   serieDetail.serieImage!.backdrops![index];
-                              return GestureDetector(
+                              return InkWell(
                                 onTap: () {
                                   Navigator.push(
                                     context,
@@ -484,47 +484,51 @@ class SerieDetailScreen extends StatelessWidget {
                                 },
                                 child: Hero(
                                   tag: image.filePath!,
-                                  child: Card(
-                                    clipBehavior: Clip.antiAlias,
-                                    elevation: 3,
-                                    borderOnForeground: true,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: ClipRRect(
-                                      //  borderRadius: BorderRadius.circular(12),
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            image.imageString('original') ?? '',
-                                        placeholder: (context, url) =>
-                                            kIsWeb || Platform.isAndroid
-                                                ? Container(
-                                                    width: 255,
-                                                    height: 155,
-                                                    color: palette?.color,
-                                                    child: Center(
-                                                        child:
-                                                            CircularProgressIndicator(
-                                                      color: palette
-                                                          ?.titleTextColor,
-                                                    )),
-                                                  )
-                                                : Container(
-                                                    width: 255,
-                                                    height: 155,
-                                                    color: palette?.color,
-                                                    child:
-                                                        CupertinoActivityIndicator(),
-                                                  ),
-                                        fit: BoxFit.cover,
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                          color: palette?.color,
-                                          width: 100,
-                                          height: 100,
-                                          child: Icon(
-                                            Icons.photo,
-                                            color: palette?.titleTextColor,
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 9,
+                                    child: Card(
+                                      clipBehavior: Clip.antiAlias,
+                                      elevation: 3,
+                                      borderOnForeground: true,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: ClipRRect(
+                                        //  borderRadius: BorderRadius.circular(12),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              image.imageString('original') ??
+                                                  '',
+                                          placeholder: (context, url) =>
+                                              kIsWeb || Platform.isAndroid
+                                                  ? Container(
+                                                      width: 255,
+                                                      height: 155,
+                                                      color: palette?.color,
+                                                      child: Center(
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                        color: palette
+                                                            ?.titleTextColor,
+                                                      )),
+                                                    )
+                                                  : Container(
+                                                      width: 255,
+                                                      height: 155,
+                                                      color: palette?.color,
+                                                      child:
+                                                          CupertinoActivityIndicator(),
+                                                    ),
+                                          fit: BoxFit.cover,
+                                          errorWidget: (context, url, error) =>
+                                              Container(
+                                            color: palette?.color,
+                                            width: 100,
+                                            height: 100,
+                                            child: Icon(
+                                              Icons.photo,
+                                              color: palette?.titleTextColor,
+                                            ),
                                           ),
                                         ),
                                       ),
@@ -568,14 +572,14 @@ class SerieDetailScreen extends StatelessWidget {
                             itemCount: serieDetail.credits!.cast!.length,
                             itemBuilder: (context, index) {
                               Cast cast = serieDetail.credits!.cast![index];
-                              return GestureDetector(
+                              return InkWell(
                                 onTap: () async {
                                   late PaletteGenerator paletteGenerator;
-                                  if (cast.profileString('w200') != null) {
+                                  if (cast.profileString('w500') != null) {
                                     paletteGenerator = await PaletteGenerator
                                         .fromImageProvider(
                                             CachedNetworkImageProvider(
-                                                cast.profileString('w200')!));
+                                                cast.profileString('w500')!));
                                   } else {
                                     paletteGenerator = await PaletteGenerator
                                         .fromImageProvider(AssetImage(
@@ -609,7 +613,7 @@ class SerieDetailScreen extends StatelessWidget {
                                               BorderRadius.circular(100),
                                           child: CachedNetworkImage(
                                             imageUrl:
-                                                cast.profileString('w200') ??
+                                                cast.profileString('w500') ??
                                                     '',
                                             imageBuilder:
                                                 (context, imageBuilder) {
@@ -732,12 +736,12 @@ class SerieDetailScreen extends StatelessWidget {
                             itemCount: serieDetail.credits!.crew!.length,
                             itemBuilder: (context, index) {
                               Cast crew = serieDetail.credits!.crew![index];
-                              return GestureDetector(
+                              return InkWell(
                                 onTap: () async {
                                   var paletteGenerator =
                                       await PaletteGenerator.fromImageProvider(
                                           CachedNetworkImageProvider(
-                                              crew.profileString('w200') ??
+                                              crew.profileString('w500') ??
                                                   ''));
                                   Navigator.push(
                                     context,
@@ -764,7 +768,7 @@ class SerieDetailScreen extends StatelessWidget {
                                         child: ClipRRect(
                                           child: CachedNetworkImage(
                                             imageUrl:
-                                                crew.profileString('w200') ??
+                                                crew.profileString('w500') ??
                                                     '',
                                             imageBuilder:
                                                 (context, imageBuilder) {

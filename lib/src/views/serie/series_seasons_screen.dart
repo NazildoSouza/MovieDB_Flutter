@@ -37,13 +37,13 @@ class SerieSeasons extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
       child: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () async {
               late PaletteGenerator paletteGenerator;
-              if (season.posterString('w200') != null) {
+              if (season.posterString('w500') != null) {
                 paletteGenerator = await PaletteGenerator.fromImageProvider(
                     CachedNetworkImageProvider(
-                        season.posterString('w200') ?? ''));
+                        season.posterString('w500') ?? ''));
               } else {
                 paletteGenerator = await PaletteGenerator.fromImageProvider(
                     AssetImage('assets/images/img_not_found.jpg'));

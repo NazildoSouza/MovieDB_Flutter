@@ -103,26 +103,43 @@ class _TabbarPersonState extends State<TabbarPerson>
 
   @override
   Widget build(BuildContext context) {
-    return TabBarView(
-      physics: BouncingScrollPhysics(),
-      controller: _tabController,
+    return Column(
       children: [
-        BiographyPerson(
-          personDetail: widget.personDetail,
-          palette: widget.palette,
+        Container(
+          height: 50,
+          margin: const EdgeInsets.symmetric(vertical: 12),
+          child: TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(text: 'Biografia'),
+              if (widget.personDetail.casts.length > 0) Tab(text: 'Atuação'),
+              if (widget.personDetail.crews.length > 0)
+                Tab(text: 'Equipe Técnica'),
+            ],
+          ),
         ),
-        if (widget.personDetail.casts.length > 0)
-          ListPersonMovies(
-            titlePage: 'Atuação',
-            personMovies: widget.personDetail.casts,
-            palette: widget.palette,
+        Expanded(
+          child: TabBarView(
+            physics: BouncingScrollPhysics(),
+            controller: _tabController,
+            children: [
+              BiographyPerson(
+                personDetail: widget.personDetail,
+                palette: widget.palette,
+              ),
+              if (widget.personDetail.casts.length > 0)
+                ListPersonMovies(
+                  personMovies: widget.personDetail.casts,
+                  palette: widget.palette,
+                ),
+              if (widget.personDetail.crews.length > 0)
+                ListPersonMovies(
+                  personMovies: widget.personDetail.crews,
+                  palette: widget.palette,
+                ),
+            ],
           ),
-        if (widget.personDetail.crews.length > 0)
-          ListPersonMovies(
-            titlePage: 'Equipe Técnica',
-            personMovies: widget.personDetail.crews,
-            palette: widget.palette,
-          ),
+        ),
       ],
     );
   }
@@ -389,7 +406,7 @@ class BiographyPerson extends StatelessWidget {
                 itemCount: personDetail.images!.profiles!.length,
                 itemBuilder: (context, index) {
                   Screenshot image = personDetail.images!.profiles![index];
-                  return GestureDetector(
+                  return InkWell(
                     onTap: () {
                       Navigator.push(
                         context,
@@ -409,42 +426,45 @@ class BiographyPerson extends StatelessWidget {
                     },
                     child: Hero(
                       tag: image.filePath!,
-                      child: Card(
-                        clipBehavior: Clip.antiAlias,
-                        elevation: 3,
-                        borderOnForeground: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: ClipRRect(
-                          //  borderRadius: BorderRadius.circular(12),
-                          child: CachedNetworkImage(
-                            imageUrl: image.imageString('original') ?? '',
-                            placeholder: (context, url) =>
-                                kIsWeb || Platform.isAndroid
-                                    ? Container(
-                                        width: 95,
-                                        height: 155,
-                                        color: palette?.color,
-                                        child: Center(
-                                            child: CircularProgressIndicator(
-                                          color: palette?.titleTextColor,
-                                        )),
-                                      )
-                                    : Container(
-                                        width: 95,
-                                        height: 155,
-                                        color: palette?.color,
-                                        child: CupertinoActivityIndicator(),
-                                      ),
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) => Container(
-                              color: palette?.color,
-                              width: 100,
-                              height: 100,
-                              child: Icon(
-                                Icons.person,
-                                color: palette?.titleTextColor,
+                      child: AspectRatio(
+                        aspectRatio: 9 / 16,
+                        child: Card(
+                          clipBehavior: Clip.antiAlias,
+                          elevation: 3,
+                          borderOnForeground: true,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: ClipRRect(
+                            //  borderRadius: BorderRadius.circular(12),
+                            child: CachedNetworkImage(
+                              imageUrl: image.imageString('original') ?? '',
+                              placeholder: (context, url) =>
+                                  kIsWeb || Platform.isAndroid
+                                      ? Container(
+                                          width: 95,
+                                          height: 155,
+                                          color: palette?.color,
+                                          child: Center(
+                                              child: CircularProgressIndicator(
+                                            color: palette?.titleTextColor,
+                                          )),
+                                        )
+                                      : Container(
+                                          width: 95,
+                                          height: 155,
+                                          color: palette?.color,
+                                          child: CupertinoActivityIndicator(),
+                                        ),
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) => Container(
+                                color: palette?.color,
+                                width: 100,
+                                height: 100,
+                                child: Icon(
+                                  Icons.person,
+                                  color: palette?.titleTextColor,
+                                ),
                               ),
                             ),
                           ),
@@ -466,14 +486,9 @@ class BiographyPerson extends StatelessWidget {
 }
 
 class ListPersonMovies extends StatelessWidget {
-  ListPersonMovies(
-      {Key? key,
-      required this.titlePage,
-      required this.personMovies,
-      this.palette})
+  ListPersonMovies({Key? key, required this.personMovies, this.palette})
       : super(key: key);
 
-  final String titlePage;
   final List<Cast> personMovies;
   final PaletteColor? palette;
 
@@ -483,23 +498,7 @@ class ListPersonMovies extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         itemCount: personMovies.length,
         itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (personMovies.first == personMovies[index])
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    titlePage.toUpperCase(),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'muli',
-                        ),
-                  ),
-                ),
-              _cardPerson(context, personMovies[index]),
-            ],
-          );
+          return _cardPerson(context, personMovies[index]);
         });
   }
 
@@ -508,12 +507,12 @@ class ListPersonMovies extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
       child: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () async {
               late PaletteGenerator paletteGenerator;
-              if (person.posterString('w200') != null) {
+              if (person.posterString('w500') != null) {
                 paletteGenerator = await PaletteGenerator.fromImageProvider(
-                    CachedNetworkImageProvider(person.posterString('w200')!));
+                    CachedNetworkImageProvider(person.posterString('w500')!));
               } else {
                 paletteGenerator = await PaletteGenerator.fromImageProvider(
                     AssetImage('assets/images/img_not_found.jpg'));
@@ -550,7 +549,7 @@ class ListPersonMovies extends StatelessWidget {
                     elevation: 1,
                     child: ClipRRect(
                       child: CachedNetworkImage(
-                        imageUrl: person.posterString('w200') ?? '',
+                        imageUrl: person.posterString('w500') ?? '',
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
                             kIsWeb || Platform.isAndroid

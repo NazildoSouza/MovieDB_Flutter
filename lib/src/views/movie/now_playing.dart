@@ -69,14 +69,14 @@ class _NowPlayingState extends State<NowPlaying> {
                   itemBuilder: (context, index) {
                     Movie movie =
                         state.movieResponse.results?[index] ?? Movie();
-                    return GestureDetector(
+                    return InkWell(
                       onTap: () async {
                         late PaletteGenerator paletteGenerator;
-                        if (movie.posterString('w200') != null) {
+                        if (movie.posterString('w500') != null) {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
                                   CachedNetworkImageProvider(
-                                      movie.posterString('w200')!));
+                                      movie.posterString('w500')!));
                         } else {
                           paletteGenerator =
                               await PaletteGenerator.fromImageProvider(
@@ -103,7 +103,7 @@ class _NowPlayingState extends State<NowPlaying> {
                           borderRadius: BorderRadius.circular(12),
                           clipBehavior: Clip.antiAlias,
                           child: CachedNetworkImage(
-                            imageUrl: movie.posterString('w200') ?? '',
+                            imageUrl: movie.posterString('w500') ?? '',
                             imageBuilder: (context, imageProvider) {
                               return Container(
                                 width: 180,

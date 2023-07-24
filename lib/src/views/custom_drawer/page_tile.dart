@@ -19,11 +19,15 @@ class PageTile extends StatelessWidget {
         label,
         style: TextStyle(
             fontWeight: FontWeight.w700,
-            color: highlighted ? Colors.blue : Theme.of(context).hintColor),
+            color: highlighted
+                ? Theme.of(context).colorScheme.surfaceTint
+                : Theme.of(context).hintColor),
       ),
       leading: Icon(
         iconData,
-        color: highlighted ? Colors.blue : Theme.of(context).hintColor,
+        color: highlighted
+            ? Theme.of(context).colorScheme.surfaceTint
+            : Theme.of(context).hintColor,
       ),
       onTap: onTap,
     );

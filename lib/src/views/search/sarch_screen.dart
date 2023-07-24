@@ -148,7 +148,7 @@ class TabbarSearch extends StatefulWidget {
 class _TabbarSearchState extends State<TabbarSearch>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  int page = 1;
+  // int page = 1;
 
   @override
   void initState() {
@@ -163,73 +163,86 @@ class _TabbarSearchState extends State<TabbarSearch>
 
   @override
   Widget build(BuildContext context) {
-    return TabBarView(
-      physics: BouncingScrollPhysics(),
-      controller: _tabController,
+    return Column(
       children: [
-        if (widget.searchResponse.movies.length > 0)
-          LazyLoadScrollView(
-              onEndOfPage: () async {
-                // if (widget.searchResponse.page == page) {
-                //   page++;
-                //   context
-                //       .read<SearchBloc>()
-                //       .add(SearchEventQuery(widget.query, page));
+        Container(
+          height: 50,
+          margin: const EdgeInsets.symmetric(vertical: 12),
+          child: TabBar(
+            controller: _tabController,
+            tabs: [
+              if (widget.searchResponse.movies.length > 0) Tab(text: 'Filmes'),
+              if (widget.searchResponse.series.length > 0) Tab(text: 'Séries'),
+              if (widget.searchResponse.persons.length > 0)
+                Tab(text: 'Pessoas'),
+            ],
+          ),
+        ),
+        Expanded(
+          child: TabBarView(
+            physics: BouncingScrollPhysics(),
+            controller: _tabController,
+            children: [
+              if (widget.searchResponse.movies.length > 0)
+                LazyLoadScrollView(
+                    onEndOfPage: () async {
+                      // if (widget.searchResponse.page == page) {
+                      //   page++;
+                      //   context
+                      //       .read<SearchBloc>()
+                      //       .add(SearchEventQuery(widget.query, page));
 
-                //   // await Future.delayed(Duration(milliseconds: 600));
-                // }
-                // setState(() {});
-              },
-              child: ListSearch(
-                titlePage: 'Filmes',
-                result: widget.searchResponse.movies,
-                palette: widget.palette,
-              )),
-        if (widget.searchResponse.series.length > 0)
-          LazyLoadScrollView(
-              onEndOfPage: () async {
-                // if (widget.searchResponse.page == page) {
-                //   page++;
-                //   context
-                //       .read<SearchBloc>()
-                //       .add(SearchEventQuery(widget.query, page));
-                //   // await Future.delayed(Duration(milliseconds: 600));
-                //   setState(() {});
-                // }
-              },
-              child: ListSearch(
-                titlePage: 'Séries',
-                result: widget.searchResponse.series,
-                palette: widget.palette,
-              )),
-        if (widget.searchResponse.persons.length > 0)
-          LazyLoadScrollView(
-              onEndOfPage: () async {
-                // if (widget.searchResponse.page == page) {
-                //   page++;
-                //   context
-                //       .read<SearchBloc>()
-                //       .add(SearchEventQuery(widget.query, page));
-                //   // await Future.delayed(Duration(milliseconds: 600));
-                //   setState(() {});
-                // }
-              },
-              child: ListSearch(
-                titlePage: 'Pessoas',
-                result: widget.searchResponse.persons,
-                palette: widget.palette,
-              )),
+                      //   // await Future.delayed(Duration(milliseconds: 600));
+                      // }
+                      // setState(() {});
+                    },
+                    child: ListSearch(
+                      result: widget.searchResponse.movies,
+                      palette: widget.palette,
+                    )),
+              if (widget.searchResponse.series.length > 0)
+                LazyLoadScrollView(
+                    onEndOfPage: () async {
+                      // if (widget.searchResponse.page == page) {
+                      //   page++;
+                      //   context
+                      //       .read<SearchBloc>()
+                      //       .add(SearchEventQuery(widget.query, page));
+                      //   // await Future.delayed(Duration(milliseconds: 600));
+                      //   setState(() {});
+                      // }
+                    },
+                    child: ListSearch(
+                      result: widget.searchResponse.series,
+                      palette: widget.palette,
+                    )),
+              if (widget.searchResponse.persons.length > 0)
+                LazyLoadScrollView(
+                    onEndOfPage: () async {
+                      // if (widget.searchResponse.page == page) {
+                      //   page++;
+                      //   context
+                      //       .read<SearchBloc>()
+                      //       .add(SearchEventQuery(widget.query, page));
+                      //   // await Future.delayed(Duration(milliseconds: 600));
+                      //   setState(() {});
+                      // }
+                    },
+                    child: ListSearch(
+                      result: widget.searchResponse.persons,
+                      palette: widget.palette,
+                    )),
+            ],
+          ),
+        ),
       ],
     );
   }
 }
 
 class ListSearch extends StatelessWidget {
-  ListSearch(
-      {Key? key, required this.titlePage, required this.result, this.palette})
-      : super(key: key);
+  ListSearch({Key? key, required this.result, this.palette}) : super(key: key);
 
-  final String titlePage;
   final List<Search> result;
   final PaletteColor? palette;
 
@@ -240,23 +253,7 @@ class ListSearch extends StatelessWidget {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         itemCount: result.length,
         itemBuilder: (context, index) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (result.first == result[index])
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    titlePage.toUpperCase(),
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'muli',
-                        ),
-                  ),
-                ),
-              _cardPerson(context, result[index]),
-            ],
-          );
+          return _cardPerson(context, result[index]);
         });
   }
 
@@ -265,14 +262,14 @@ class ListSearch extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15.0, right: 15.0),
       child: Column(
         children: [
-          GestureDetector(
+          InkWell(
             onTap: () async {
               late PaletteGenerator paletteGenerator;
-              if (search.posterString('w200') != null ||
-                  search.profileString('w200') != null) {
+              if (search.posterString('w500') != null ||
+                  search.profileString('w500') != null) {
                 paletteGenerator = await PaletteGenerator.fromImageProvider(
-                    CachedNetworkImageProvider(search.profileString('w200') ??
-                        search.posterString('w200') ??
+                    CachedNetworkImageProvider(search.profileString('w500') ??
+                        search.posterString('w500') ??
                         ''));
               } else {
                 paletteGenerator = await PaletteGenerator.fromImageProvider(
@@ -320,8 +317,8 @@ class ListSearch extends StatelessWidget {
                     elevation: 1,
                     child: ClipRRect(
                       child: CachedNetworkImage(
-                        imageUrl: search.posterString('w200') ??
-                            search.profileString('w200') ??
+                        imageUrl: search.posterString('w500') ??
+                            search.profileString('w500') ??
                             '',
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
